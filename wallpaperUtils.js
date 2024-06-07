@@ -36,11 +36,16 @@ export async function readColorSchedule(filePath) {
 
 export async function readCurrentColor() {
 	try {
-		const data = await fs.promises.readFile("currentColor.txt", "utf8")
-		return data.trim()
+		if (fs.existsSync("currentColor.txt")) {
+			const data = await fs.promises.readFile("currentColor.txt", "utf8")
+			return data.trim()
+		} else {
+			console.warn("currentColor.txt not found, returning default color #000000")
+			return "#000000" // Default color
+		}
 	} catch (error) {
 		console.error("Error reading current color:", error)
-		return null
+		return "#000000" // Default color
 	}
 }
 
