@@ -20,9 +20,12 @@ async function transitionToSpecifiedColor(color) {
 
 async function transitionBasedOnTime(colorSchedule) {
 	try {
-		const currentTime = new Date().getHours()
-		const currentColor = colorSchedule.find(schedule => schedule.hour === currentTime)?.color
-		if (currentColor) {
+		const currentTime = new Date().getHours();
+		const closestSchedule = colorSchedule.reduce((prev, curr) => {
+			return Math.abs(curr.hour - currentTime) < Math.abs(prev.hour - currentTime) ? curr : prev;
+		});
+		if (closestSchedule) {
+			const currentColor = closestSchedule.color;
 			const previousColor = await readCurrentColor()
 			await transitionToColor(previousColor, currentColor, 60000)
 			console.log("Transition based on time complete!")
