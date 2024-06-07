@@ -2,7 +2,8 @@
 	"type": "module",
 	"dependencies": {
 		"jimp": "^0.22.12",
-		"wallpaper": "^7.2.1"
+		"wallpaper": "^7.2.1",
+		"yargs": "^17.7.2"
 	},
 	"name": "wallslapper",
 	"version": "1.0.0",

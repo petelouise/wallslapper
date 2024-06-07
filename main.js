@@ -1,6 +1,10 @@
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
-import { transitionToColor, readCurrentColor, writeCurrentColor, readColorSchedule } from "./wallpaperUtils.js"
+import {
+	readColorSchedule,
+	readCurrentColor,
+	transitionToColor,
+} from "./wallpaperUtils.js"
 
 const colors = ["#ff00ff", "#00ff00", "#0000ff", "#ffff00", "#00ffff", "#ff0000"]
 
@@ -20,12 +24,14 @@ async function transitionToSpecifiedColor(color) {
 
 async function transitionBasedOnTime(colorSchedule) {
 	try {
-		const currentTime = new Date().getHours();
+		const currentTime = new Date().getHours()
 		const closestSchedule = colorSchedule.reduce((prev, curr) => {
-			return Math.abs(curr.hour - currentTime) < Math.abs(prev.hour - currentTime) ? curr : prev;
-		});
+			return Math.abs(curr.hour - currentTime) < Math.abs(prev.hour - currentTime)
+				? curr
+				: prev
+		})
 		if (closestSchedule) {
-			const currentColor = closestSchedule.color;
+			const currentColor = closestSchedule.color
 			const previousColor = await readCurrentColor()
 			await transitionToColor(previousColor, currentColor, 60000)
 			console.log("Transition based on time complete!")
