@@ -3,7 +3,7 @@ import { setWallpaper } from "wallpaper"
 // await getWallpaper()
 
 import createCanvas from "canvas"
-import "fs"
+import fs from "fs"
 
 // Create a solid color image
 const width = 256
