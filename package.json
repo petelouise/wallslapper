@@ -5,3 +5,16 @@
 		"wallpaper": "^7.2.1"
 	}
 }
+{
+  "name": "wallslapper",
+  "version": "1.0.0",
+  "description": "A script to set wallpaper",
+  "main": "main.js",
+  "scripts": {
+    "start": "node --no-deprecation main.js"
+  },
+  "dependencies": {
+    "jimp": "^0.16.1",
+    "wallpaper": "^4.4.0"
+  }
+}
