@@ -3,6 +3,7 @@ import path from "path"
 import { setWallpaper } from "wallpaper"
 import { interpolateColor } from "./colorUtils.js"
 import { createSolidColorImage } from "./imageUtils.js"
+import fs from "fs"
 
 export async function transitionToColor(startColor, endColor, duration) {
 	const steps = 60
@@ -21,6 +22,16 @@ export async function transitionToColor(startColor, endColor, duration) {
 	}
 	await writeCurrentColor(endColor)
 	console.log("Transition complete")
+}
+
+export async function readColorSchedule(filePath) {
+	try {
+		const data = await fs.promises.readFile(filePath, "utf8")
+		return JSON.parse(data)
+	} catch (error) {
+		console.error("Error reading color schedule:", error)
+		return []
+	}
 }
 
 export async function readCurrentColor() {
