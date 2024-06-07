@@ -1,6 +1,6 @@
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
-import { transitionToColor, readCurrentColor, writeCurrentColor } from "./wallpaperUtils.js"
+import { transitionToColor, readCurrentColor, writeCurrentColor, readColorSchedule } from "./wallpaperUtils.js"
 
 const colors = ["#ff00ff", "#00ff00", "#0000ff", "#ffff00", "#00ffff", "#ff0000"]
 
@@ -41,21 +41,18 @@ async function main() {
 			type: "string",
 			description: "Specify a color to transition to immediately",
 		})
-		.option("schedule", {
+		.option("scheduleFile", {
 			alias: "s",
-			type: "array",
-			description: "Provide a list of colors and times of day",
+			type: "string",
+			description: "Provide a file with a list of colors and times of day",
 		})
 		.help()
 		.alias("help", "h").argv
 
 	if (argv.color) {
 		await transitionToSpecifiedColor(argv.color)
-	} else if (argv.schedule) {
-		const colorSchedule = argv.schedule.map(item => {
-			const [hour, color] = item.split(":")
-			return { hour: parseInt(hour, 10), color }
-		})
+	} else if (argv.scheduleFile) {
+		const colorSchedule = await readColorSchedule(argv.scheduleFile)
 		await transitionBasedOnTime(colorSchedule)
 	} else {
 		const startColor = getRandomColor()
