@@ -1,0 +1,7 @@
+{
+	"type": "module",
+	"dependencies": {
+		"jimp": "^0.22.12",
+		"wallpaper": "^7.2.1"
+	}
+}
