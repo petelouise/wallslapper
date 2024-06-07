@@ -19,5 +19,24 @@ export async function transitionToColor(startColor, endColor, duration) {
 		await setWallpaper(imagePath)
 		await new Promise((resolve) => setTimeout(resolve, interval))
 	}
+	await writeCurrentColor(endColor)
 	console.log("Transition complete")
+}
+
+export async function readCurrentColor() {
+	try {
+		const data = await fs.promises.readFile("currentColor.txt", "utf8")
+		return data.trim()
+	} catch (error) {
+		console.error("Error reading current color:", error)
+		return null
+	}
+}
+
+export async function writeCurrentColor(color) {
+	try {
+		await fs.promises.writeFile("currentColor.txt", color, "utf8")
+	} catch (error) {
+		console.error("Error writing current color:", error)
+	}
 }
