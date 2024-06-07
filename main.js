@@ -3,20 +3,17 @@ import { setWallpaper } from "wallpaper"
 // await getWallpaper()
 
 import Jimp from "jimp"
-import fs from "fs"
 
 const image_path = __dirname + "/solid_color.png"
 
 // Create a solid color image using Jimp
 new Jimp(256, 256, "#00ff00", (err, image) => {
-    if (err) throw err;
+	if (err) throw err
 
-    // Save the image
-    image.write(image_path, async () => {
-        // Set wallpaper
-        await setWallpaper(image_path)
-        console.log("Done!")
-    });
-});
-
-console.log("Done!")
+	// Save the image
+	image.write(image_path, async () => {
+		// Set wallpaper
+		await setWallpaper(image_path)
+		console.log("Done!")
+	})
+})
