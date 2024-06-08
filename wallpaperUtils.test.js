@@ -1,6 +1,6 @@
-import fs from "fs"
-import { writeCurrentColor } from "./wallpaperUtils.js"
-import { jest } from '@jest/globals'
+const fs = require("fs")
+const { writeCurrentColor } = require("./wallpaperUtils.js")
+const { jest } = require('@jest/globals')
 
 jest.mock("fs", () => ({
   promises: {
