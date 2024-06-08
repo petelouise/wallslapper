@@ -6,6 +6,12 @@ import { interpolateColor } from "./colorUtils.js"
 import { createSolidColorImage } from "./imageUtils.js"
 
 export async function transitionToColor(startColor, endColor, transitionTime) {
+	if (startColor === endColor) {
+		console.log(`Start and end colors are the same, skipping transition`)
+		await writeCurrentColor(endColor)
+		return
+	}
+
 	if (transitionTime === 0) {
 		console.log(`Instant transition from ${startColor} to ${endColor}`)
 		const imagePath = path.join(os.tmpdir(), `solid_color_${Date.now()}.png`)
@@ -16,8 +22,8 @@ export async function transitionToColor(startColor, endColor, transitionTime) {
 		return
 	}
 
-	const stepsPerSecond = 60
-	const steps = Math.max(1, Math.floor((transitionTime / 1000) * stepsPerSecond))
+	const minInterval = 100 // Minimum interval between steps in milliseconds
+	const steps = Math.max(1, Math.floor(transitionTime / minInterval))
 	const interval = transitionTime / steps
 	console.log(
 		`Starting transition from ${startColor} to ${endColor} over ${transitionTime}ms with ${steps} steps`
