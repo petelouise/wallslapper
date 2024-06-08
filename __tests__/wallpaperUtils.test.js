@@ -21,6 +21,10 @@ jest.mock("../imageUtils.js", () => ({
 	createSolidColorImage: jest.fn(),
 }))
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 describe("writeCurrentColor", () => {
 	it("should write the color to currentColor.txt", async () => {
 		const color = "#FF5733"
