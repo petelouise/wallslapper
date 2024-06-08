@@ -5,7 +5,9 @@ import {
 	transitionBasedOnTime,
 	getRandomColor,
 	transitionToColor,
+	readCurrentColor,
 } from "./wallpaperUtils.js"
+import { readConfig } from "./configUtils.js"
 
 export async function parseCLIArgs() {
 	const argv = yargs(hideBin(process.argv))
@@ -19,11 +21,22 @@ export async function parseCLIArgs() {
 			type: "string",
 			description: "Provide a file with a list of colors and times of day",
 		})
+		.option("duration", {
+			alias: "d",
+			description: "The duration of the transition in milliseconds",
+			type: "number",
+		})
 		.help()
 		.alias("help", "h").argv
 
 	if (argv.color) {
 		await transitionToSpecifiedColor(argv.color)
+		const config = await readConfig();
+		const startColor = await readCurrentColor();
+		const endColor = argv.color;
+		const duration = argv.duration || config.defaultTransitionTime;
+
+		await transitionToColor(startColor, endColor, duration);
 	} else if (argv.scheduleFile) {
 		const colorSchedule = await readColorSchedule(argv.scheduleFile)
 		await transitionBasedOnTime(colorSchedule)
