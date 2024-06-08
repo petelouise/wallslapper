@@ -7,6 +7,7 @@ import {
 	transitionBasedOnTime,
 	transitionToColor,
 } from "./wallpaperUtils.js"
+import { genconfig } from "./configUtils.js"
 
 export async function parseCLIArgs() {
 	const argv = yargs(hideBin(process.argv))
@@ -30,10 +31,17 @@ export async function parseCLIArgs() {
 			description: "The duration of the transition in milliseconds",
 			type: "number",
 		})
-		.help()
+		.option("genconfig", {
+			alias: "g",
+			type: "boolean",
+			description: "Generate an example config file in the home directory",
+		})
+        .help()
 		.alias("help", "h").argv
 
-	if (argv.color) {
+	if (argv.genconfig) {
+		await genconfig()
+	} else if (argv.color) {
 		const config = await readConfig()
 		const startColor = await readCurrentColor()
 		const endColor = argv.color
