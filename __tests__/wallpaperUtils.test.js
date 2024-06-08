@@ -1,6 +1,10 @@
 import fs from "fs"
 import { writeCurrentColor } from "../wallpaperUtils.js"
 
+jest.mock("wallpaper", () => ({
+  setWallpaper: jest.fn(),
+}))
+
 jest.mock("fs", () => ({
 	promises: {
 		writeFile: jest.fn(),
