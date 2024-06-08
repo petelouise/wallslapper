@@ -1,18 +1,24 @@
 import fs from "fs"
+import { setWallpaper } from "wallpaper"
+import { createSolidColorImage } from "../imageUtils.js"
 import {
 	resolveScheduledColor,
 	transitionToColor,
 	writeCurrentColor,
 } from "../wallpaperUtils.js"
 
-jest.mock("wallpaper", () => ({
-	setWallpaper: jest.fn(),
-}))
-
 jest.mock("fs", () => ({
 	promises: {
 		writeFile: jest.fn(),
 	},
+}))
+
+jest.mock("wallpaper", () => ({
+	setWallpaper: jest.fn(),
+}))
+
+jest.mock("../imageUtils.js", () => ({
+	createSolidColorImage: jest.fn(),
 }))
 
 describe("writeCurrentColor", () => {
@@ -36,16 +42,6 @@ describe("writeCurrentColor", () => {
 		expect(console.error).toHaveBeenCalledWith("Error writing current color:", error)
 	})
 })
-import { createSolidColorImage } from "../imageUtils.js"
-import { setWallpaper } from "wallpaper"
-
-jest.mock("../imageUtils.js", () => ({
-	createSolidColorImage: jest.fn(),
-}))
-
-jest.mock("wallpaper", () => ({
-	setWallpaper: jest.fn(),
-}))
 
 describe("transitionToColor", () => {
 	it("should transition colors correctly", async () => {
