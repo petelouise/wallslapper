@@ -37,7 +37,10 @@ export async function transitionToColor(startColor, endColor, transitionTime) {
 		await setWallpaper(imagePath)
 		await new Promise((resolve) => setTimeout(resolve, interval))
 	}
-	await writeCurrentColor(endColor.replace("#", ""))
+	const imagePath = path.join(os.tmpdir(), `solid_color_${Date.now()}_final.png`)
+	await createSolidColorImage(endColor, imagePath)
+	await setWallpaper(imagePath)
+	await writeCurrentColor(endColor.slice(1))
 	console.log("Transition complete")
 }
 
