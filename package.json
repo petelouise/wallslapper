@@ -1,6 +1,7 @@
 {
 	"type": "module",
 	"dependencies": {
+		"jest": "^29.7.0",
 		"jimp": "^0.22.12",
 		"wallpaper": "^7.2.1",
 		"yargs": "^17.7.2"
@@ -10,6 +11,7 @@
 	"description": "A script to set wallpaper",
 	"main": "main.js",
 	"scripts": {
-		"start": "node --no-deprecation main.js"
+		"start": "node --no-deprecation main.js",
+		"test": "jest"
 	}
 }
