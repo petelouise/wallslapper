@@ -40,7 +40,7 @@ export async function parseCLIArgs() {
 	} else if (argv.color) {
 		const startColor = await readCurrentColor()
 		const endColor = argv.color
-		const duration = argv.duration || config.defaultTransitionTime
+		const duration = argv.duration !== undefined ? argv.duration : config.defaultTransitionTime
 
 		await transitionToColor(startColor, endColor, duration)
 	} else if (argv.schedule || argv.scheduleFile) {
