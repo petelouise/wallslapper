@@ -11,10 +11,10 @@ export async function readConfig() {
       return JSON.parse(data);
     } else {
       console.warn(`${configPath} not found, returning default config`);
-      return { defaultColor: "#000000", defaultTransitionTime: 1000 };
+      return { defaultColor: "#000000", defaultTransitionTime: 1000, defaultSchedule: null };
     }
   } catch (error) {
     console.error("Error reading config:", error);
-    return { defaultColor: "#000000", defaultTransitionTime: 1000 };
+    return { defaultColor: "#000000", defaultTransitionTime: 1000, defaultSchedule: null };
   }
 }
