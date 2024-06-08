@@ -21,11 +21,6 @@ export async function parseCLIArgs() {
 			type: "boolean",
 			description: "Use a predefined schedule to transition to colors",
 		})
-		.option("scheduleFile", {
-			alias: "f",
-			type: "string",
-			description: "Provide a file with a list of colors and times of day",
-		})
 		.option("duration", {
 			alias: "d",
 			description: "The duration of the transition in milliseconds",
