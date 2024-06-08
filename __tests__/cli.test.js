@@ -32,7 +32,7 @@ describe("CLI Tests", () => {
 				}
 			})
 		})
-		const data = await fs.promises.readFile("currentColor.txt", "utf8")
-		expect(data.trim()).toBe(color)
+		const data = await fs.promises.readFile(path.join(os.homedir(), ".wallslappercurrent"), "utf8")
+		expect(`#${data.trim()}`).toBe(color)
 	})
 })

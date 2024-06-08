@@ -1,6 +1,7 @@
 import fs from "fs"
 import os from "os"
 import path from "path"
+import os from "os"
 import { setWallpaper } from "wallpaper"
 import { interpolateColor } from "./colorUtils.js"
 import { createSolidColorImage } from "./imageUtils.js"
@@ -8,7 +9,7 @@ import { createSolidColorImage } from "./imageUtils.js"
 export async function transitionToColor(startColor, endColor, transitionTime) {
 	if (startColor === endColor) {
 		console.log(`Start and end colors are the same, skipping transition`)
-		await writeCurrentColor(endColor)
+		await writeCurrentColor(endColor.replace("#", ""))
 		return
 	}
 
@@ -37,7 +38,7 @@ export async function transitionToColor(startColor, endColor, transitionTime) {
 		await setWallpaper(imagePath)
 		await new Promise((resolve) => setTimeout(resolve, interval))
 	}
-	await writeCurrentColor(endColor)
+	await writeCurrentColor(endColor.replace("#", ""))
 	console.log("Transition complete")
 }
 
@@ -60,13 +61,15 @@ export function resolveScheduledColor(schedule) {
 	return selectedColor
 }
 
+const currentColorPath = path.join(os.homedir(), ".wallslappercurrent")
+
 export async function readCurrentColor() {
 	try {
-		if (fs.existsSync("currentColor.txt")) {
-			const data = await fs.promises.readFile("currentColor.txt", "utf8")
-			return data.trim()
+		if (fs.existsSync(currentColorPath)) {
+			const data = await fs.promises.readFile(currentColorPath, "utf8")
+			return `#${data.trim()}`
 		} else {
-			console.warn("currentColor.txt not found, returning default color #000000")
+			console.warn(`${currentColorPath} not found, returning default color #000000`)
 			return "#000000" // Default color
 		}
 	} catch (error) {
@@ -77,7 +80,7 @@ export async function readCurrentColor() {
 
 export async function writeCurrentColor(color) {
 	try {
-		await fs.promises.writeFile("currentColor.txt", color, "utf8")
+		await fs.promises.writeFile(currentColorPath, color.replace("#", ""), "utf8")
 	} catch (error) {
 		console.error("Error writing current color:", error)
 	}
