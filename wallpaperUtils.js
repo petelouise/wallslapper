@@ -24,25 +24,6 @@ export async function transitionToColor(startColor, endColor, transitionTime) {
 	console.log("Transition complete")
 }
 
-export async function transitionBasedOnTime(colorSchedule, defaultTransitionTime) {
-	const now = new Date()
-	const currentTime = now.getHours() * 60 + now.getMinutes()
-
-	for (const { time, color } of colorSchedule) {
-		const [hours, minutes] = time.split(":").map(Number)
-		const scheduleTime = hours * 60 + minutes
-
-		if (currentTime <= scheduleTime) {
-			const startColor = await readCurrentColor()
-			const endColor = color
-			const transitionTime = (scheduleTime - currentTime) * 60 * 1000 // Convert to milliseconds
-
-			await transitionToColor(startColor, endColor, transitionTime || defaultTransitionTime)
-			break
-		}
-	}
-}
-
 export async function readColorSchedule(filePath) {
 	try {
 		const data = await fs.promises.readFile(filePath, "utf8")
