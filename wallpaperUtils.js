@@ -34,6 +34,25 @@ export async function readColorSchedule(filePath) {
 	}
 }
 
+export function resolveScheduledColor(schedule) {
+	const now = new Date()
+	const currentTime = now.getHours() * 60 + now.getMinutes()
+	let selectedColor = null
+	let selectedTime = -1
+
+	for (const [time, color] of Object.entries(schedule)) {
+		const [hours, minutes] = time.split(":").map(Number)
+		const scheduleTime = hours * 60 + minutes
+
+		if (scheduleTime <= currentTime && scheduleTime > selectedTime) {
+			selectedTime = scheduleTime
+			selectedColor = color
+		}
+	}
+
+	return selectedColor
+}
+
 export async function readCurrentColor() {
 	try {
 		if (fs.existsSync("currentColor.txt")) {
