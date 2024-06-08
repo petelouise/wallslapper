@@ -28,7 +28,7 @@ export async function transitionToColor(startColor, endColor, transitionTime) {
 	console.log(
 		`Starting transition from ${startColor} to ${endColor} over ${transitionTime}ms with ${steps} steps`
 	)
-	for (let i = 0; i <= steps; i++) {
+	for (let i = 0; i < steps; i++) {
 		const factor = i / steps
 		const intermediateColor = interpolateColor(startColor, endColor, factor)
 		console.log(`Step ${i}: Color ${intermediateColor}`)
