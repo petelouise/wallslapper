@@ -15,3 +15,12 @@ export function interpolateColor(color1, color2, factor) {
 	const b = Math.round(b1 + factor * (b2 - b1))
 	return rgbToHex(r, g, b)
 }
+
+export function getRandomColor() {
+	const letters = '0123456789ABCDEF';
+	let color = '#';
+	for (let i = 0; i < 6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
+}
