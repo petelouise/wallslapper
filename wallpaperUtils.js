@@ -24,16 +24,6 @@ export async function transitionToColor(startColor, endColor, transitionTime) {
 	console.log("Transition complete")
 }
 
-export async function readColorSchedule(filePath) {
-	try {
-		const data = await fs.promises.readFile(filePath, "utf8")
-		return JSON.parse(data)
-	} catch (error) {
-		console.error("Error reading color schedule:", error)
-		return []
-	}
-}
-
 export function resolveScheduledColor(schedule) {
 	const now = new Date()
 	const currentTime = now.getHours() * 60 + now.getMinutes()
