@@ -6,10 +6,11 @@ import { interpolateColor } from "./colorUtils.js"
 import { createSolidColorImage } from "./imageUtils.js"
 
 export async function transitionToColor(startColor, endColor, transitionTime) {
-	const steps = 60
+	const stepsPerSecond = 60
+	const steps = transitionTime === 0 ? 1 : Math.max(1, Math.floor((transitionTime / 1000) * stepsPerSecond))
 	const interval = transitionTime / steps
 	console.log(
-		`Starting transition from ${startColor} to ${endColor} over ${transitionTime}ms`
+		`Starting transition from ${startColor} to ${endColor} over ${transitionTime}ms with ${steps} steps`
 	)
 	for (let i = 0; i <= steps; i++) {
 		const factor = i / steps
@@ -18,7 +19,9 @@ export async function transitionToColor(startColor, endColor, transitionTime) {
 		const imagePath = path.join(os.tmpdir(), `solid_color_${Date.now()}_${i}.png`)
 		await createSolidColorImage(intermediateColor, imagePath)
 		await setWallpaper(imagePath)
-		await new Promise((resolve) => setTimeout(resolve, interval))
+		if (transitionTime > 0) {
+			await new Promise((resolve) => setTimeout(resolve, interval))
+		}
 	}
 	await writeCurrentColor(endColor)
 	console.log("Transition complete")
