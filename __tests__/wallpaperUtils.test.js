@@ -1,5 +1,5 @@
 import fs from "fs"
-import { transitionToColor, writeCurrentColor } from "../wallpaperUtils.js"
+import { resolveScheduledColor, transitionToColor, writeCurrentColor } from "../wallpaperUtils.js"
 
 jest.mock("wallpaper", () => ({
   setWallpaper: jest.fn(),
