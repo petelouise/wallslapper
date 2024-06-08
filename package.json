@@ -16,7 +16,10 @@
 	"jest": {
 		"transform": {
 			"^.+\\.js$": "babel-jest"
-		}
+		},
+		"transformIgnorePatterns": [
+			"/node_modules/(?!wallpaper)"
+		]
 	},
 	"devDependencies": {
 		"@babel/preset-env": "^7.24.7",
