@@ -1,7 +1,7 @@
-const { exec } = require("child_process")
-const fs = require("fs")
-const path = require("path")
-const os = require("os")
+import { exec } from "child_process"
+import fs from "fs"
+import os from "os"
+import path from "path"
 
 const configPath = path.join(os.homedir(), ".wallslapper.json")
 
