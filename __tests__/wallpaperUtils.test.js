@@ -52,9 +52,11 @@ describe("transitionToColor", () => {
 		const startColor = "#000000"
 		const endColor = "#FFFFFF"
 		const transitionTime = 1000
+		const minInterval = 100;
+		const expectedSteps = Math.max(1, Math.floor(transitionTime / minInterval));
 		await transitionToColor(startColor, endColor, transitionTime)
-		expect(createSolidColorImage).toHaveBeenCalledTimes(61)
-		expect(setWallpaper).toHaveBeenCalledTimes(61)
+		expect(createSolidColorImage).toHaveBeenCalledTimes(expectedSteps)
+		expect(setWallpaper).toHaveBeenCalledTimes(expectedSteps)
 	})
 
 	it("should handle instant transition", async () => {
