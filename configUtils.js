@@ -14,7 +14,7 @@ export async function readConfig() {
 			return {
 				defaultColor: "#000000",
 				defaultTransitionTime: 0,
-				defaultSchedule: null,
+				schedule: null,
 			}
 		}
 	} catch (error) {
@@ -22,7 +22,7 @@ export async function readConfig() {
 		return {
 			defaultColor: "#000000",
 			defaultTransitionTime: 0,
-			defaultSchedule: null,
+			schedule: null,
 		}
 	}
 }
@@ -31,7 +31,7 @@ export async function genconfig() {
 	const exampleConfig = {
 		defaultColor: "#000000",
 		defaultTransitionTime: 0,
-		defaultSchedule: {
+		schedule: {
 			"08:00": "#FF5733",
 			"12:00": "#33FF57",
 			"18:00": "#3357FF",

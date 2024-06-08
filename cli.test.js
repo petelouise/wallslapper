@@ -13,7 +13,7 @@ describe("CLI Tests", () => {
 	})
 
 	test("wallslapper --genconfig creates the config only", (done) => {
-		exec("node main.js --genconfig", (error, stdout, stderr) => {
+		exec("node cli.js --genconfig", (error, stdout, stderr) => {
 			expect(error).toBeNull()
 			expect(fs.existsSync(configPath)).toBe(true)
 			done()
@@ -22,7 +22,7 @@ describe("CLI Tests", () => {
 
 	test("wallslapper --color transitions to the specified color", (done) => {
 		const color = "#FF5733"
-		exec(`node main.js --color ${color} --duration 0`, (error, stdout, stderr) => {
+		exec(`node cli.js --color ${color} --duration 0`, (error, stdout, stderr) => {
 			expect(error).toBeNull()
 			fs.readFile("currentColor.txt", "utf8", (err, data) => {
 				expect(err).toBeNull()
