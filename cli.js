@@ -1,13 +1,12 @@
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
-import {
-	transitionToSpecifiedColor,
-	transitionBasedOnTime,
-	getRandomColor,
-	transitionToColor,
-	readCurrentColor,
-} from "./wallpaperUtils.js"
+import { getRandomColor } from "./colorUtils.js"
 import { readConfig } from "./configUtils.js"
+import {
+	readCurrentColor,
+	transitionBasedOnTime,
+	transitionToColor,
+} from "./wallpaperUtils.js"
 
 export async function parseCLIArgs() {
 	const argv = yargs(hideBin(process.argv))
@@ -30,19 +29,18 @@ export async function parseCLIArgs() {
 		.alias("help", "h").argv
 
 	if (argv.color) {
-		await transitionToSpecifiedColor(argv.color)
-		const config = await readConfig();
-		const startColor = await readCurrentColor();
-		const endColor = argv.color;
-		const duration = argv.duration || config.defaultTransitionTime;
+		const config = await readConfig()
+		const startColor = await readCurrentColor()
+		const endColor = argv.color
+		const duration = argv.duration || config.defaultTransitionTime
 
-		await transitionToColor(startColor, endColor, duration);
+		await transitionToColor(startColor, endColor, duration)
 	} else if (argv.scheduleFile) {
 		const colorSchedule = await readColorSchedule(argv.scheduleFile)
 		await transitionBasedOnTime(colorSchedule)
 	} else {
-		const startColor = getRandomColor();
-		const endColor = getRandomColor();
+		const startColor = getRandomColor()
+		const endColor = getRandomColor()
 		await transitionToColor(startColor, endColor, 60000)
 		console.log("Random transition complete!")
 	}

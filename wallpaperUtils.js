@@ -12,7 +12,7 @@ export async function transitionToColor(startColor, endColor, transitionTime = n
 	const steps = 60
 	const interval = transitionTime / steps
 	console.log(
-		`Starting transition from ${startColor} to ${endColor} over ${duration}ms`
+		`Starting transition from ${startColor} to ${endColor} over ${transitionTime}ms`
 	)
 	for (let i = 0; i <= steps; i++) {
 		const factor = i / steps
@@ -38,9 +38,9 @@ export async function transitionBasedOnTime(colorSchedule) {
 		if (currentTime <= scheduleTime) {
 			const startColor = await readCurrentColor()
 			const endColor = color
-			const duration = (scheduleTime - currentTime) * 60 * 1000 // Convert to milliseconds
+			const transitionTime = (scheduleTime - currentTime) * 60 * 1000 // Convert to milliseconds
 
-			await transitionToColor(startColor, endColor, duration)
+			await transitionToColor(startColor, endColor, transitionTime)
 			break
 		}
 	}
