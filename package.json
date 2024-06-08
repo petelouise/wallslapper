@@ -13,5 +13,11 @@
 	"scripts": {
 		"start": "node --no-deprecation cli.js",
 		"test": "jest"
+	},
+	"jest": {
+		"transform": {
+			"^.+\\.js$": "babel-jest"
+		},
+		"testEnvironment": "node"
 	}
 }
