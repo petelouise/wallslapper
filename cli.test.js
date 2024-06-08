@@ -1,7 +1,7 @@
-import { exec } from "child_process";
-import fs from "fs";
-import path from "path";
-import os from "os";
+const { exec } = require("child_process");
+const fs = require("fs");
+const path = require("path");
+const os = require("os");
 
 const configPath = path.join(os.homedir(), ".wallslapper.json");
 
