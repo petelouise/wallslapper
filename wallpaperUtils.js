@@ -3,14 +3,9 @@ import os from "os"
 import path from "path"
 import { setWallpaper } from "wallpaper"
 import { interpolateColor } from "./colorUtils.js"
-import { readConfig } from "./configUtils.js"
 import { createSolidColorImage } from "./imageUtils.js"
 
-export async function transitionToColor(startColor, endColor, transitionTime = null) {
-	const config = await readConfig()
-	if (transitionTime === null) {
-		transitionTime = config.defaultTransitionTime
-	}
+export async function transitionToColor(startColor, endColor, transitionTime) {
 	const steps = 60
 	const interval = transitionTime / steps
 	console.log(
@@ -29,7 +24,7 @@ export async function transitionToColor(startColor, endColor, transitionTime = n
 	console.log("Transition complete")
 }
 
-export async function transitionBasedOnTime(colorSchedule) {
+export async function transitionBasedOnTime(colorSchedule, defaultTransitionTime) {
 	const now = new Date()
 	const currentTime = now.getHours() * 60 + now.getMinutes()
 
@@ -42,7 +37,7 @@ export async function transitionBasedOnTime(colorSchedule) {
 			const endColor = color
 			const transitionTime = (scheduleTime - currentTime) * 60 * 1000 // Convert to milliseconds
 
-			await transitionToColor(startColor, endColor, transitionTime)
+			await transitionToColor(startColor, endColor, transitionTime || defaultTransitionTime)
 			break
 		}
 	}

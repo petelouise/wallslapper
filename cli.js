@@ -33,23 +33,23 @@ export async function parseCLIArgs() {
 		.help()
 		.alias("help", "h").argv
 
+	const config = await readConfig()
+
 	if (argv.genconfig) {
 		await genconfig()
 	} else if (argv.color) {
-		const config = await readConfig()
 		const startColor = await readCurrentColor()
 		const endColor = argv.color
-		const duration = argv.duration // || config.defaultTransitionTime
+		const duration = argv.duration || config.defaultTransitionTime
 
 		await transitionToColor(startColor, endColor, duration)
 	} else if (argv.schedule || argv.scheduleFile) {
-		const config = await readConfig()
 		const colorSchedule = argv.scheduleFile
 			? await readColorSchedule(argv.scheduleFile)
 			: config.defaultSchedule
 
 		if (colorSchedule) {
-			await transitionBasedOnTime(colorSchedule)
+			await transitionBasedOnTime(colorSchedule, config.defaultTransitionTime)
 		} else {
 			console.error(
 				"No schedule file provided and no default schedule found in config."
@@ -58,7 +58,7 @@ export async function parseCLIArgs() {
 	} else {
 		const startColor = getRandomColor()
 		const endColor = getRandomColor()
-		await transitionToColor(startColor, endColor, 60000)
+		await transitionToColor(startColor, endColor, config.defaultTransitionTime)
 		console.log("Random transition complete!")
 	}
 }
