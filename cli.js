@@ -50,10 +50,11 @@ export async function parseCLIArgs() {
 		await transitionToColor(startColor, endColor, duration)
 	} else if (argv.schedule || argv.scheduleFile) {
 		const config = await readConfig()
-		const scheduleFile = argv.scheduleFile || config.defaultSchedule
+		const colorSchedule = argv.scheduleFile
+			? await readColorSchedule(argv.scheduleFile)
+			: config.defaultSchedule
 
-		if (scheduleFile) {
-			const colorSchedule = await readColorSchedule(scheduleFile)
+		if (colorSchedule) {
 			await transitionBasedOnTime(colorSchedule)
 		} else {
 			console.error(

@@ -23,7 +23,11 @@ export async function genconfig() {
   const exampleConfig = {
     defaultColor: "#000000",
     defaultTransitionTime: 1000,
-    defaultSchedule: "schedule.example.json"
+    defaultSchedule: {
+      "08:00": "#FF5733",
+      "12:00": "#33FF57",
+      "18:00": "#3357FF"
+    }
   };
 
   try {
