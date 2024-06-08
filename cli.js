@@ -20,6 +20,15 @@ export async function parseCLIArgs() {
 			type: "string",
 			description: "Provide a file with a list of colors and times of day",
 		})
+		.option("schedule", {
+			alias: "s",
+			type: "string",
+			description: "Provide a file with a list of colors and times of day",
+		})
+		.option("scheduleFile", {
+			type: "string",
+			description: "Provide a file with a list of colors and times of day",
+		})
 		.option("duration", {
 			alias: "d",
 			description: "The duration of the transition in milliseconds",
@@ -35,9 +44,16 @@ export async function parseCLIArgs() {
 		const duration = argv.duration || config.defaultTransitionTime
 
 		await transitionToColor(startColor, endColor, duration)
-	} else if (argv.scheduleFile) {
-		const colorSchedule = await readColorSchedule(argv.scheduleFile)
-		await transitionBasedOnTime(colorSchedule)
+	} else if (argv.schedule || argv.scheduleFile) {
+		const config = await readConfig()
+		const scheduleFile = argv.scheduleFile || config.defaultSchedule
+
+		if (scheduleFile) {
+			const colorSchedule = await readColorSchedule(scheduleFile)
+			await transitionBasedOnTime(colorSchedule)
+		} else {
+			console.error("No schedule file provided and no default schedule found in config.")
+		}
 	} else {
 		const startColor = getRandomColor()
 		const endColor = getRandomColor()
