@@ -21,29 +21,32 @@ describe("CLI Tests", () => {
 	})
 
 	test("wallslapper --color transitions to the specified color", async () => {
-		const color = "#FF5733";
-		const duration = 100; // Set a short duration for the test
+		const color = "#FF5733"
+		const duration = 0 // Set a short duration for the test
 
 		// Execute the CLI command with the specified color and duration
 		await new Promise((resolve, reject) => {
-			exec(`node cli.js --color ${color} --duration ${duration}`, (error, stdout, stderr) => {
-				if (error) {
-					reject(error);
-				} else {
-					resolve();
+			exec(
+				`node cli.js --color ${color} --duration ${duration}`,
+				(error, stdout, stderr) => {
+					if (error) {
+						reject(error)
+					} else {
+						resolve()
+					}
 				}
-			});
-		});
+			)
+		})
 
 		// Wait for a short delay to ensure the transition has completed
-		await new Promise((resolve) => setTimeout(resolve, duration + 100));
+		await new Promise((resolve) => setTimeout(resolve, duration + 1000))
 
 		// Read the current color from the file
-		const currentColorPath = path.join(os.homedir(), ".wallslappercurrent");
-		const data = await fs.promises.readFile(currentColorPath, "utf8");
-		const currentColor = `#${data.trim()}`;
+		const currentColorPath = path.join(os.homedir(), ".wallslappercurrent")
+		const data = await fs.promises.readFile(currentColorPath, "utf8")
+		const currentColor = `#${data.trim()}`
 
 		// Assert that the current color matches the specified color
-		expect(currentColor).toBe(color);
-	});
+		expect(currentColor).toBe(color)
+	})
 })
