@@ -25,11 +25,11 @@ describe("CLI Tests", () => {
 		console.log("command", `node cli.js --color ${color} --duration 0`)
 		exec(`node cli.js --color ${color} --duration 0`, (error, stdout, stderr) => {
 			expect(error).toBeNull()
-			done()
-			// fs.readFile("currentColor.txt", "utf8", (err, data) => {
-			// 	expect(err).toBeNull()
-			// 	expect(data.trim()).toBe(color)
-			// })
+			fs.readFile("currentColor.txt", "utf8", (err, data) => {
+				expect(err).toBeNull()
+				expect(data.trim()).toBe(color)
+				done()
+			})
 		})
 	})
 })
