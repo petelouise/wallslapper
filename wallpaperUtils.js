@@ -8,7 +8,9 @@ import { createSolidColorImage } from "./imageUtils.js"
 
 export async function transitionToColor(startColor, endColor, transitionTime = null) {
 	const config = await readConfig()
-	transitionTime ||= config.defaultTransitionTime
+	if (transitionTime === null) {
+		transitionTime = config.defaultTransitionTime
+	}
 	const steps = 60
 	const interval = transitionTime / steps
 	console.log(

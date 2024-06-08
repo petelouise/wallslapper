@@ -1,13 +1,12 @@
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
 import { getRandomColor } from "./colorUtils.js"
-import { readConfig } from "./configUtils.js"
+import { genconfig, readConfig } from "./configUtils.js"
 import {
 	readCurrentColor,
 	transitionBasedOnTime,
 	transitionToColor,
 } from "./wallpaperUtils.js"
-import { genconfig } from "./configUtils.js"
 
 export async function parseCLIArgs() {
 	const argv = yargs(hideBin(process.argv))
@@ -31,7 +30,7 @@ export async function parseCLIArgs() {
 			type: "boolean",
 			description: "Generate an example config file in the home directory",
 		})
-        .help()
+		.help()
 		.alias("help", "h").argv
 
 	if (argv.genconfig) {
@@ -40,7 +39,7 @@ export async function parseCLIArgs() {
 		const config = await readConfig()
 		const startColor = await readCurrentColor()
 		const endColor = argv.color
-		const duration = argv.duration || config.defaultTransitionTime
+		const duration = argv.duration // || config.defaultTransitionTime
 
 		await transitionToColor(startColor, endColor, duration)
 	} else if (argv.schedule || argv.scheduleFile) {
