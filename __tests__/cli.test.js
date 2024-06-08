@@ -20,16 +20,19 @@ describe("CLI Tests", () => {
 		})
 	})
 
-	test("wallslapper --color transitions to the specified color", (done) => {
+	test("wallslapper --color transitions to the specified color", async () => {
 		const color = "#FF5733"
 		console.log("command", `node cli.js --color ${color} --duration 0`)
-		exec(`node cli.js --color ${color} --duration 0`, (error, stdout, stderr) => {
-			expect(error).toBeNull()
-			fs.readFile("currentColor.txt", "utf8", (err, data) => {
-				expect(err).toBeNull()
-				expect(data.trim()).toBe(color)
-				done()
+		await new Promise((resolve, reject) => {
+			exec(`node cli.js --color ${color} --duration 0`, (error, stdout, stderr) => {
+				if (error) {
+					reject(error)
+				} else {
+					resolve()
+				}
 			})
 		})
+		const data = await fs.promises.readFile("currentColor.txt", "utf8")
+		expect(data.trim()).toBe(color)
 	})
 })
