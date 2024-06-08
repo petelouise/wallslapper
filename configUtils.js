@@ -18,3 +18,18 @@ export async function readConfig() {
     return { defaultColor: "#000000", defaultTransitionTime: 1000, defaultSchedule: null };
   }
 }
+
+export async function genconfig() {
+  const exampleConfig = {
+    defaultColor: "#000000",
+    defaultTransitionTime: 1000,
+    defaultSchedule: "schedule.example.json"
+  };
+
+  try {
+    await fs.promises.writeFile(configPath, JSON.stringify(exampleConfig, null, 2), "utf8");
+    console.log(`Example config written to ${configPath}`);
+  } catch (error) {
+    console.error("Error writing example config:", error);
+  }
+}
