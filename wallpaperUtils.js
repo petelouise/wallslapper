@@ -1,7 +1,6 @@
 import fs from "fs"
 import os from "os"
 import path from "path"
-import os from "os"
 import { setWallpaper } from "wallpaper"
 import { interpolateColor } from "./colorUtils.js"
 import { createSolidColorImage } from "./imageUtils.js"
