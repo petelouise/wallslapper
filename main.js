@@ -1,4 +1,4 @@
-import { parseCLIArgs } from "./cli.js"
+import { parseCLIArgs } from "./cli.js";
 
 async function main() {
 	await parseCLIArgs()

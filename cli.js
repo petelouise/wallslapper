@@ -41,8 +41,8 @@ export async function parseCLIArgs() {
 		const colorSchedule = await readColorSchedule(argv.scheduleFile)
 		await transitionBasedOnTime(colorSchedule)
 	} else {
-		const startColor = getRandomColor()
-		const endColor = getRandomColor()
+		const startColor = getRandomColor();
+		const endColor = getRandomColor();
 		await transitionToColor(startColor, endColor, 60000)
 		console.log("Random transition complete!")
 	}

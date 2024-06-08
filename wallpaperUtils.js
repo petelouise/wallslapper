@@ -1,13 +1,16 @@
+import fs from "fs"
 import os from "os"
 import path from "path"
 import { setWallpaper } from "wallpaper"
 import { interpolateColor } from "./colorUtils.js"
+import { readConfig } from "./configUtils.js"
 import { createSolidColorImage } from "./imageUtils.js"
-import fs from "fs"
 
-export async function transitionToColor(startColor, endColor, duration) {
+export async function transitionToColor(startColor, endColor, transitionTime = null) {
+	const config = await readConfig()
+	transitionTime ||= config.defaultTransitionTime
 	const steps = 60
-	const interval = duration / steps
+	const interval = transitionTime / steps
 	console.log(
 		`Starting transition from ${startColor} to ${endColor} over ${duration}ms`
 	)
