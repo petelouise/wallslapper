@@ -3,19 +3,18 @@ import os from "os"
 import path from "path"
 import { setWallpaper } from "wallpaper"
 import { interpolateColor } from "./colorUtils.js"
-import { createSolidColorImage } from "./imageUtils.js"
 
-export async function transitionToColor(startColor, endColor, transitionTime) {
+export async function transitionToColor(endColor, duration) {
+	const startColor = await readCurrentColor()
+
 	if (startColor === endColor) {
-		console.log(`Start and end colors are the same, skipping transition`)
-		await writeCurrentColor(endColor.replace("#", ""))
+		console.log(`No transition needed from ${startColor} to ${endColor}`)
 		return
 	}
-
-	if (transitionTime === 0) {
+	console.log(`Starting transition from ${startColor} to ${endColor}`)
+	if (!duration) {
 		console.log(`Instant transition from ${startColor} to ${endColor}`)
-		const imagePath = path.join(os.tmpdir(), `solid_color_${Date.now()}.png`)
-		await createSolidColorImage(endColor, imagePath)
+		const imagePath = await createSolidColorImage(endColor)
 		await setWallpaper(imagePath)
 		await writeCurrentColor(endColor)
 		console.log("Transition complete")
@@ -23,44 +22,22 @@ export async function transitionToColor(startColor, endColor, transitionTime) {
 	}
 
 	const minInterval = 100 // Minimum interval between steps in milliseconds
-	const steps = Math.max(1, Math.floor(transitionTime / minInterval))
-	const interval = transitionTime / steps
+	const steps = Math.max(1, Math.floor(duration / minInterval))
+	const interval = duration / steps
 	console.log(
-		`Starting transition from ${startColor} to ${endColor} over ${transitionTime}ms with ${steps} steps`
+		`Starting transition from ${startColor} to ${endColor} over ${duration}ms with ${steps} steps`
 	)
 	for (let i = 0; i < steps; i++) {
 		const factor = i / steps
 		const intermediateColor = interpolateColor(startColor, endColor, factor)
 		console.log(`Step ${i}: Color ${intermediateColor}`)
-		const imagePath = path.join(os.tmpdir(), `solid_color_${Date.now()}_${i}.png`)
-		await createSolidColorImage(intermediateColor, imagePath)
+		const imagePath = await createSolidColorImage(intermediateColor)
 		await setWallpaper(imagePath)
 		await new Promise((resolve) => setTimeout(resolve, interval))
 	}
-	const imagePath = path.join(os.tmpdir(), `solid_color_${Date.now()}_final.png`)
-	await createSolidColorImage(endColor, imagePath)
-	await setWallpaper(imagePath)
-	await writeCurrentColor(endColor.slice(1))
+
+	await writeCurrentColor(endColor)
 	console.log("Transition complete")
-}
-
-export function resolveScheduledColor(schedule) {
-	const now = new Date()
-	const currentTime = now.getHours() * 60 + now.getMinutes()
-	let selectedColor = null
-	let selectedTime = -1
-
-	for (const [time, color] of Object.entries(schedule)) {
-		const [hours, minutes] = time.split(":").map(Number)
-		const scheduleTime = hours * 60 + minutes
-
-		if (scheduleTime <= currentTime && scheduleTime > selectedTime) {
-			selectedTime = scheduleTime
-			selectedColor = color
-		}
-	}
-
-	return selectedColor
 }
 
 const currentColorPath = path.join(os.homedir(), ".wallslappercurrent")
@@ -69,14 +46,14 @@ export async function readCurrentColor() {
 	try {
 		if (fs.existsSync(currentColorPath)) {
 			const data = await fs.promises.readFile(currentColorPath, "utf8")
-			return `#${data.trim()}`
+			return data.trim()
 		} else {
-			console.warn(`${currentColorPath} not found, returning default color #000000`)
-			return "#000000" // Default color
+			console.warn(`${currentColorPath} not found`)
+			return
 		}
 	} catch (error) {
 		console.error("Error reading current color:", error)
-		return "#000000" // Default color
+		return
 	}
 }
 
@@ -86,4 +63,13 @@ export async function writeCurrentColor(color) {
 	} catch (error) {
 		console.error("Error writing current color:", error)
 	}
+}
+
+import Jimp from "jimp"
+
+export async function createSolidColorImage(color) {
+	const image = new Jimp(256, 256, color)
+	const imagePath = path.join(os.tmpdir(), `solid_color_${Date.now()}.png`)
+	await image.writeAsync(imagePath)
+	return imagePath
 }

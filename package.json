@@ -1,7 +1,9 @@
 {
 	"type": "module",
 	"dependencies": {
+		"commander": "^12.1.0",
 		"jimp": "^0.22.12",
+		"node-mac": "^1.0.1",
 		"wallpaper": "^7.2.1",
 		"yargs": "^17.7.2"
 	},
@@ -9,6 +11,9 @@
 	"version": "1.0.0",
 	"description": "A script to set wallpaper",
 	"main": "cli.js",
+	"bin": {
+		"wallslapper": "./bin/cli.js"
+	},
 	"scripts": {
 		"start": "node --no-deprecation cli.js",
 		"test": "jest"

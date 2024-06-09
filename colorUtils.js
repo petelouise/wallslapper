@@ -4,7 +4,7 @@ export function hexToRgb(hex) {
 }
 
 export function rgbToHex(r, g, b) {
-	return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
+	return `${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
 }
 
 export function interpolateColor(color1, color2, factor) {
@@ -17,10 +17,10 @@ export function interpolateColor(color1, color2, factor) {
 }
 
 export function getRandomColor() {
-	const letters = '0123456789ABCDEF';
-	let color = '#';
+	const letters = "0123456789ABCDEF"
+	let color = ""
 	for (let i = 0; i < 6; i++) {
-		color += letters[Math.floor(Math.random() * 16)];
+		color += letters[Math.floor(Math.random() * 16)]
 	}
-	return color;
+	return color
 }
