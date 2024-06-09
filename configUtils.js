@@ -3,6 +3,15 @@ import os from "os"
 import path from "path"
 
 const configPath = path.join(os.homedir(), ".wallslapper.json")
+const defaultConfig = {
+	palettes: [
+		{
+			name: "default",
+			colors: ["000000", "ffffff", "ff5733", "33ff57", "3357ff", "ff33ff"],
+		},
+	],
+	duration: 0,
+}
 
 export async function readConfig() {
 	try {
@@ -11,30 +20,27 @@ export async function readConfig() {
 			return JSON.parse(data)
 		} else {
 			console.warn(`${configPath} not found, returning default config`)
-			return {
-				defaultColor: "#000000",
-				defaultTransitionTime: 0,
-				schedule: null,
-			}
+			return defaultConfig
 		}
 	} catch (error) {
 		console.error("Error reading config:", error)
-		return {
-			defaultColor: "#000000",
-			defaultTransitionTime: 0,
-			schedule: null,
-		}
+		return defaultConfig
 	}
 }
 
 export async function genconfig() {
 	const exampleConfig = {
-		defaultColor: "#000000",
-		defaultTransitionTime: 0,
+		palettes: [
+			{
+				name: "default",
+				colors: ["000000", "ffffff", "ff5733", "33ff57", "3357ff", "ff33ff"],
+			},
+		],
+		duration: 0,
 		schedule: {
-			"08:00": "#FF5733",
-			"12:00": "#33FF57",
-			"18:00": "#3357FF",
+			"08:00": "ff5733",
+			"12:00": "33ff57",
+			"18:00": "3357ff",
 		},
 	}
 

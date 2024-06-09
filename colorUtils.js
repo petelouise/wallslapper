@@ -24,3 +24,11 @@ export function getRandomColor() {
 	}
 	return color
 }
+
+import { readConfig } from "./configUtils.js"
+export async function getRandomColorFromPalette() {
+	const config = await readConfig()
+	return config.palettes[Math.floor(Math.random() * config.palettes.length)].colors[
+		Math.floor(Math.random() * config.palettes[0].colors.length)
+	]
+}

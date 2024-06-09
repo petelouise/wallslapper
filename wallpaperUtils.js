@@ -7,13 +7,18 @@ import { interpolateColor } from "./colorUtils.js"
 export async function transitionToColor(endColor, duration) {
 	const startColor = await readCurrentColor()
 
+	if (!startColor) {
+		console.log("No start color found, ignoring transition")
+		duration = 0
+	}
+
 	if (startColor === endColor) {
 		console.log(`No transition needed from ${startColor} to ${endColor}`)
 		return
 	}
-	console.log(`Starting transition from ${startColor} to ${endColor}`)
+
 	if (!duration) {
-		console.log(`Instant transition from ${startColor} to ${endColor}`)
+		console.log(`Instant transition to ${endColor}`)
 		const imagePath = await createSolidColorImage(endColor)
 		await setWallpaper(imagePath)
 		await writeCurrentColor(endColor)
@@ -21,6 +26,7 @@ export async function transitionToColor(endColor, duration) {
 		return
 	}
 
+	console.log(`Starting transition from ${startColor} to ${endColor}`)
 	const minInterval = 100 // Minimum interval between steps in milliseconds
 	const steps = Math.max(1, Math.floor(duration / minInterval))
 	const interval = duration / steps
