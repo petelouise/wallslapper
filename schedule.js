@@ -1,34 +1,4 @@
-export function resolveScheduledColor(schedule) {
-	const now = new Date()
-	const currentTime = now.getHours() * 60 + now.getMinutes()
-	let selectedColor = null
-	let selectedTime = -1
-
-	const scheduleEntries = Object.entries(schedule).map(([time, color]) => {
-		const [hours, minutes] = time.split(":").map(Number)
-		return { time: hours * 60 + minutes, color }
-	})
-
-	for (const { time, color } of scheduleEntries) {
-		if (time <= currentTime && time > selectedTime) {
-			selectedTime = time
-			selectedColor = color
-		}
-	}
-
-	// If no color was selected, it means current time is before the first scheduled time of the day
-	if (selectedColor === null) {
-		// Find the latest time in the previous day (i.e., the highest time value in the schedule)
-		const lastEntry = scheduleEntries.reduce((latest, entry) => {
-			return entry.time > latest.time ? entry : latest
-		})
-
-		selectedColor = lastEntry.color
-	}
-
-	return selectedColor
-}
-
+import { resolveScheduledColor } from "./colorUtils.js"
 import { readConfig } from "./configUtils.js"
 import { transitionToColor } from "./wallpaperUtils.js"
 
