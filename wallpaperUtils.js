@@ -7,13 +7,11 @@ import { readConfig } from "./configUtils.js"
 
 export async function runPinwheel(palette, duration, forever = false) {
 	const config = await readConfig()
-	console.log(`config: ${JSON.stringify(config)}`)
 	const colors = config.palettes.find((p) => p.name === palette).colors
-	
+
 	do {
 		for (var i = 0; i < colors.length; i++) {
 			const color = colors[i]
-			console.log(`pinwheel color: ${color}`)
 			await transitionToColor(color, duration)
 		}
 	} while (forever)
