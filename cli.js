@@ -2,7 +2,7 @@ import { Command } from "commander"
 import { Service } from "node-mac"
 import { getRandomColor, getRandomColorFromPalette } from "./colorUtils.js"
 import { genconfig } from "./configUtils.js"
-import { runPinwheel, transitionToColor } from "./wallpaperUtils.js"
+import { transitionToColor } from "./wallpaperUtils.js"
 
 const program = new Command()
 
@@ -98,13 +98,13 @@ program
 		await transitionToColor(hexcode, duration)
 	})
 
-program
-	.command("pinwheel <palette> [duration]")
-	.description("cycle wallpaper through the default palette")
-	.option("--forever", "Run the pinwheel forever in a loop")
-	.action(async (palette, duration, cmdObj) => {
-		runPinwheel(palette, duration, cmdObj.forever)
-	})
+// program
+// 	.command("pinwheel <palette> [duration]")
+// 	.description("cycle wallpaper through the default palette")
+// 	.option("--forever", "Run the pinwheel forever in a loop")
+// 	.action(async (palette, duration, cmdObj) => {
+// 		runPinwheel(palette, duration, cmdObj.forever)
+// 	})
 
 program
 	.command("genconfig")
