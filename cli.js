@@ -8,11 +8,14 @@ const program = new Command()
 
 const scriptPath = "./schedule.js"
 
+const homeDir = os.homedir()
+
 const pinwheelSvc = new Service({
 	name: "wallslapper-pinwheel",
 	description: "runs the pinwheel in the background",
 	script: "./pinwheelService.js",
 	runAtLoad: true,
+	logpath: path.join(homeDir, "Library/Logs/wallslapper-pinwheel"),
 	// Uncomment the following line to run with node
 	// execPath: '/usr/local/bin/node'
 })
@@ -22,6 +25,7 @@ const wallslapperSvc = new Service({
 	description: "changes wallpaper throughout the day",
 	script: scriptPath,
 	runAtLoad: true,
+	logpath: path.join(homeDir, "Library/Logs/wallslapper"),
 	// Uncomment the following line to run with node
 	// execPath: '/usr/local/bin/node'
 })
