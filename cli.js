@@ -20,7 +20,16 @@ const launchAgentsPath = path.resolve(
 const getNodePath = () => {
 	try {
 		return execSync("which node").toString().trim()
+		fs.unlinkSync(launchAgentsPath)
 	} catch (error) {
+		console.log(
+			"Failed to stop the pinwheel service or service not loaded:",
+			error.message
+		)
+	}
+	try {
+		fs.unlinkSync(launchAgentsPath)
+		console.log("Plist file deleted")
 		console.error("Failed to determine Node.js path:", error.message)
 		process.exit(1)
 	}
@@ -50,9 +59,14 @@ const createPlist = (nodePath) => {
 </dict>
 </plist>
   `
-	fs.writeFileSync(plistPath, plistContent)
-	fs.copyFileSync(plistPath, launchAgentsPath)
-	console.log(`Plist file created at: ${launchAgentsPath}`)
+	if (fs.existsSync(launchAgentsPath)) {
+		console.error(`Plist file already exists at: ${launchAgentsPath}. Please stop the service first.`)
+		process.exit(1)
+	} else {
+		fs.writeFileSync(plistPath, plistContent)
+		fs.copyFileSync(plistPath, launchAgentsPath)
+		console.log(`Plist file created at: ${launchAgentsPath}`)
+	}
 }
 
 const startPinwheel = (palette, duration) => {
