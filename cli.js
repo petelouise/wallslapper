@@ -2,9 +2,13 @@ import { Command } from "commander"
 import { Service } from "node-mac"
 import path from "path"
 import os from "os"
+import { fileURLToPath } from 'url'
 import { getRandomColor, getRandomColorFromPalette } from "./colorUtils.js"
 import { genconfig } from "./configUtils.js"
 import { transitionToColor } from "./wallpaperUtils.js"
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const program = new Command()
 
