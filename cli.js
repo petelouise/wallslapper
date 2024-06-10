@@ -48,8 +48,10 @@ program
 		pinwheelSvc.uninstall()
 	})
 
-program
-	.command("start pinwheel <palette> [duration]")
+const pinwheelCommand = program.command("pinwheel").description("Pinwheel commands")
+
+pinwheelCommand
+	.command("start <palette> [duration]")
 	.description("Start the pinwheel in the background")
 	.action((palette, duration) => {
 		pinwheelSvc.env = {
@@ -61,6 +63,17 @@ program
 			console.log("Pinwheel started in the background")
 		})
 		pinwheelSvc.install()
+	})
+
+pinwheelCommand
+	.command("stop")
+	.description("Stop the pinwheel service")
+	.action(() => {
+		pinwheelSvc.on("uninstall", () => {
+			console.log("Pinwheel stopped")
+		})
+		pinwheelSvc.stop()
+		pinwheelSvc.uninstall()
 	})
 
 // program
