@@ -1,79 +1,112 @@
+import { execSync } from "child_process"
 import { Command } from "commander"
-import { Service } from "node-mac"
-import { getRandomColor, getRandomColorFromPalette } from "./colorUtils.js"
-import { genconfig } from "./configUtils.js"
-import { transitionToColor } from "./wallpaperUtils.js"
+import fs from "fs"
+import path from "path"
+import { fileURLToPath } from "url"
+
+// Resolve __filename and __dirname in ES module
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const program = new Command()
+const scriptPath = path.resolve(__dirname, "./pinwheelService.js")
+const plistName = "com.yourdomain.wallslapper.plist"
+const plistPath = path.resolve(__dirname, plistName)
+const launchAgentsPath = path.resolve(
+	process.env.HOME,
+	`Library/LaunchAgents/${plistName}`
+)
 
-const scriptPath = "./schedule.js"
+const getNodePath = () => {
+	try {
+		return execSync("which node").toString().trim()
+	} catch (error) {
+		console.error("Failed to determine Node.js path:", error.message)
+		process.exit(1)
+	}
+}
 
-const pinwheelSvc = new Service({
-	name: "wallslapper-pinwheel",
-	description: "runs the pinwheel in the background",
-	script: "./pinwheelService.js",
-	runAtLoad: true,
-	// Uncomment the following line to run with node
-	// execPath: '/usr/local/bin/node'
-})
+const createPlist = (nodePath) => {
+	const plistContent = `
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.yourdomain.wallslapper</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>${nodePath}</string>
+        <string>${scriptPath}</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/wallslapper.out</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/wallslapper.err</string>
+</dict>
+</plist>
+  `
+	fs.writeFileSync(plistPath, plistContent)
+	fs.copyFileSync(plistPath, launchAgentsPath)
+	console.log(`Plist file created at: ${launchAgentsPath}`)
+}
 
-const wallslapperSvc = new Service({
-	name: "wallslapper",
-	description: "changes wallpaper throughout the day",
-	script: scriptPath,
-	runAtLoad: true,
-	// Uncomment the following line to run with node
-	// execPath: '/usr/local/bin/node'
-})
+const startPinwheel = (palette, duration) => {
+	const nodePath = getNodePath()
+	createPlist(nodePath)
+	try {
+		execSync(`launchctl bootout gui/$(id -u) ${launchAgentsPath}`, {
+			stdio: "inherit",
+		})
+	} catch (error) {
+		console.log(
+			"Service not previously loaded or another issue occurred:",
+			error.message
+		)
+	}
+	try {
+		execSync(`launchctl bootstrap gui/$(id -u) ${launchAgentsPath}`, {
+			stdio: "inherit",
+		})
+		console.log(`Pinwheel started with palette ${palette} for duration ${duration}`)
+	} catch (error) {
+		console.log("Failed to start the service:", error.message)
+	}
+}
 
-// program
-// 	.command("start")
-// 	.description("Start the wallslapper service")
-// 	.action(() => {
-// 		wallslapperSvc.on("install", () => {
-// 			wallslapperSvc.start()
-// 			console.log("wallslapper started")
-// 		})
-// 		pinwheelSvc.install()
-// 	})
+const stopPinwheel = () => {
+	try {
+		execSync(`launchctl bootout gui/$(id -u) ${launchAgentsPath}`, {
+			stdio: "inherit",
+		})
+		console.log("Pinwheel stopped")
+	} catch (error) {
+		console.log(
+			"Failed to stop the pinwheel service or service not loaded:",
+			error.message
+		)
+	}
+}
+
 const pinwheelCommand = program.command("pinwheel").description("Pinwheel commands")
 
 pinwheelCommand
 	.command("start <palette> [duration]")
 	.description("Start the pinwheel in the background")
 	.action((palette, duration) => {
-		pinwheelSvc.env = {
-			PALETTE: palette,
-			DURATION: duration || "",
-		}
-		pinwheelSvc.on("install", () => {
-			pinwheelSvc.start()
-			console.log("Pinwheel started in the background")
-		})
-		pinwheelSvc.install()
+		startPinwheel(palette, duration || "")
 	})
 
 pinwheelCommand
 	.command("stop")
 	.description("Stop the pinwheel service")
 	.action(() => {
-		pinwheelSvc.on("uninstall", () => {
-			console.log("Pinwheel stopped")
-		})
-		pinwheelSvc.stop()
-		pinwheelSvc.uninstall()
+		stopPinwheel()
 	})
-
-// program
-// 	.command("stop")
-// 	.description("Stop the wallslapper service")
-// 	.action(() => {
-// 		pinwheelSvc.on("uninstall", () => {
-// 			console.log("wallslapper stopped")
-// 		})
-// 		pinwheelSvc.stop()
-// 		pinwheelSvc.uninstall()
-// 	})
 
 program
 	.command("change <hexcode> [duration]")
