@@ -59,9 +59,7 @@ const startPinwheel = (palette, duration) => {
 	const nodePath = getNodePath()
 	createPlist(nodePath)
 	try {
-		execSync(`launchctl bootout gui/$(id -u) ${launchAgentsPath}`, {
-			stdio: "inherit",
-		})
+		execSync(`launchctl unload ${launchAgentsPath}`, { stdio: "inherit" })
 	} catch (error) {
 		console.log(
 			"Service not previously loaded or another issue occurred:",
@@ -69,9 +67,7 @@ const startPinwheel = (palette, duration) => {
 		)
 	}
 	try {
-		execSync(`launchctl bootstrap gui/$(id -u) ${launchAgentsPath}`, {
-			stdio: "inherit",
-		})
+		execSync(`launchctl load ${launchAgentsPath}`, { stdio: "inherit" })
 		console.log(`Pinwheel started with palette ${palette} for duration ${duration}`)
 	} catch (error) {
 		console.log("Failed to start the service:", error.message)
@@ -80,9 +76,7 @@ const startPinwheel = (palette, duration) => {
 
 const stopPinwheel = () => {
 	try {
-		execSync(`launchctl bootout gui/$(id -u) ${launchAgentsPath}`, {
-			stdio: "inherit",
-		})
+		execSync(`launchctl unload ${launchAgentsPath}`, { stdio: "inherit" })
 		console.log("Pinwheel stopped")
 	} catch (error) {
 		console.log(
