@@ -65,8 +65,9 @@ program
 program
 	.command("pinwheel <palette> [duration]")
 	.description("cycle wallpaper through the default palette")
-	.action(async (palette, duration) => {
-		runPinwheel(palette, duration)
+	.option("--forever", "Run the pinwheel forever in a loop")
+	.action(async (palette, duration, cmdObj) => {
+		runPinwheel(palette, duration, cmdObj.forever)
 	})
 
 program
