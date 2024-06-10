@@ -3,6 +3,17 @@ import os from "os"
 import path from "path"
 import { setWallpaper } from "wallpaper"
 import { interpolateColor } from "./colorUtils.js"
+import { readConfig } from "./configUtils.js"
+
+export async function runPinwheel(palette, duration) {
+	const config = await readConfig()
+	console.log(`config: ${JSON.stringify(config)}`)
+	const colors = config.palettes.find((p) => p.name === palette).colors
+	for (var color of colors) {
+		console.log(`pinwheel color: ${color}`)
+		await transitionToColor(color, duration)
+	}
+}
 
 export async function transitionToColor(endColor, duration) {
 	const startColor = await readCurrentColor()
@@ -52,7 +63,7 @@ export async function readCurrentColor() {
 	try {
 		if (fs.existsSync(currentColorPath)) {
 			const data = await fs.promises.readFile(currentColorPath, "utf8")
-			return data.trim()
+			return data.trim().replaceAll("#", "")
 		} else {
 			console.warn(`${currentColorPath} not found`)
 			return

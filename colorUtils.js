@@ -1,19 +1,11 @@
-export function hexToRgb(hex) {
-	const bigint = parseInt(hex.slice(1), 16)
-	return [(bigint >> 16) & 255, (bigint >> 8) & 255, bigint & 255]
-}
-
-export function rgbToHex(r, g, b) {
-	return `${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
-}
+// Importing chroma.js using ES6 import syntax
+import chroma from "chroma-js"
 
 export function interpolateColor(color1, color2, factor) {
-	const [r1, g1, b1] = hexToRgb(color1)
-	const [r2, g2, b2] = hexToRgb(color2)
-	const r = Math.round(r1 + factor * (r2 - r1))
-	const g = Math.round(g1 + factor * (g2 - g1))
-	const b = Math.round(b1 + factor * (b2 - b1))
-	return rgbToHex(r, g, b)
+	const color1Obj = chroma.hex(color1)
+	const color2Obj = chroma.hex(color2)
+	const interpolatedColor = chroma.mix(color1Obj, color2Obj, factor)
+	return interpolatedColor.hex()
 }
 
 export function getRandomColor() {
@@ -26,16 +18,25 @@ export function getRandomColor() {
 }
 
 import { readConfig } from "./configUtils.js"
-export async function getRandomColorFromPalette() {
+export async function getRandomColorFromPalette(palette) {
 	const config = await readConfig()
-	return config.palettes[Math.floor(Math.random() * config.palettes.length)].colors[
-		Math.floor(Math.random() * config.palettes[0].colors.length)
-	]
+	var colors
+
+	if (palette) {
+		colors = config.palettes.find((p) => p.name === palette).colors
+	} else {
+		colors =
+			config.palettes[Math.floor(Math.random() * config.palettes.length)].colors
+	}
+
+	return colors[Math.floor(Math.random() * config.palettes[0].colors.length)]
 }
 
 export function resolveScheduledColor(schedule) {
 	const now = new Date()
 	const currentTime = now.getHours() * 60 + now.getMinutes()
+	console.log(`currentTime: ${currentTime}`)
+	console.log(`now: ${now}`)
 	let selectedColor = null
 	let selectedTime = -1
 

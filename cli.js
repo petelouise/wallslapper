@@ -1,7 +1,8 @@
 import { Command } from "commander"
+import { Service } from "node-mac"
 import { getRandomColor, getRandomColorFromPalette } from "./colorUtils.js"
 import { genconfig } from "./configUtils.js"
-import { transitionToColor } from "./wallpaperUtils.js"
+import { runPinwheel, transitionToColor } from "./wallpaperUtils.js"
 
 const program = new Command()
 
@@ -54,11 +55,18 @@ program
 	})
 
 program
-	.command("shuffle [duration]")
+	.command("shuffle <palette> [duration]")
 	.description("change wallpaper to a random color from the default palette")
-	.action(async (duration) => {
-		const hexcode = await getRandomColorFromPalette()
+	.action(async (palette, duration) => {
+		const hexcode = await getRandomColorFromPalette(palette)
 		await transitionToColor(hexcode, duration)
+	})
+
+program
+	.command("pinwheel <palette> [duration]")
+	.description("cycle wallpaper through the default palette")
+	.action(async (palette, duration) => {
+		runPinwheel(palette, duration)
 	})
 
 program
