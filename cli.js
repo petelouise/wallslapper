@@ -30,11 +30,11 @@ program
 	.command("start")
 	.description("Start the wallslapper service")
 	.action(() => {
-		pinwheelSvc.on("install", () => {
-			pinwheelSvc.start()
+		wallslapperSvc.on("install", () => {
+			wallslapperSvc.start()
 			console.log("wallslapper started")
 		})
-		svc.install()
+		pinwheelSvc.install()
 	})
 
 program
@@ -52,22 +52,22 @@ program
 	.command("start pinwheel <palette> [duration]")
 	.description("Start the pinwheel in the background")
 	.action((palette, duration) => {
-		svc.on("install", () => {
-			svc.start()
+		pinwheelSvc.on("install", () => {
+			pinwheelSvc.start()
 			console.log("Pinwheel started in the background")
 		})
-		svc.install()
+		pinwheelSvc.install()
 	})
 
 program
 	.command("stop")
 	.description("Stop the wallslapper service")
 	.action(() => {
-		svc.on("uninstall", () => {
+		pinwheelSvc.on("uninstall", () => {
 			console.log("wallslapper stopped")
 		})
-		svc.stop()
-		svc.uninstall()
+		pinwheelSvc.stop()
+		pinwheelSvc.uninstall()
 	})
 
 program
