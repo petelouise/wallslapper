@@ -37,8 +37,25 @@ const wallslapperSvc = new Service({
 // 		pinwheelSvc.install()
 // 	})
 
-program
-	.command("stop pinwheel")
+const pinwheelCommand = program.command("pinwheel").description("Pinwheel commands")
+
+pinwheelCommand
+	.command("start <palette> [duration]")
+	.description("Start the pinwheel in the background")
+	.action((palette, duration) => {
+		pinwheelSvc.env = {
+			PALETTE: palette,
+			DURATION: duration || "",
+		}
+		pinwheelSvc.on("install", () => {
+			pinwheelSvc.start()
+			console.log("Pinwheel started in the background")
+		})
+		pinwheelSvc.install()
+	})
+
+pinwheelCommand
+	.command("stop")
 	.description("Stop the pinwheel service")
 	.action(() => {
 		pinwheelSvc.on("uninstall", () => {
