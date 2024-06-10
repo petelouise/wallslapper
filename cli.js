@@ -26,16 +26,16 @@ const wallslapperSvc = new Service({
 	// execPath: '/usr/local/bin/node'
 })
 
-program
-	.command("start")
-	.description("Start the wallslapper service")
-	.action(() => {
-		wallslapperSvc.on("install", () => {
-			wallslapperSvc.start()
-			console.log("wallslapper started")
-		})
-		pinwheelSvc.install()
-	})
+// program
+// 	.command("start")
+// 	.description("Start the wallslapper service")
+// 	.action(() => {
+// 		wallslapperSvc.on("install", () => {
+// 			wallslapperSvc.start()
+// 			console.log("wallslapper started")
+// 		})
+// 		pinwheelSvc.install()
+// 	})
 
 program
 	.command("stop pinwheel")
@@ -52,10 +52,9 @@ program
 	.command("start pinwheel <palette> [duration]")
 	.description("Start the pinwheel in the background")
 	.action((palette, duration) => {
-		pinwheelSvc.script = `./pinwheelService.js`
 		pinwheelSvc.env = {
 			PALETTE: palette,
-			DURATION: duration || ""
+			DURATION: duration || "",
 		}
 		pinwheelSvc.on("install", () => {
 			pinwheelSvc.start()
@@ -64,16 +63,16 @@ program
 		pinwheelSvc.install()
 	})
 
-program
-	.command("stop")
-	.description("Stop the wallslapper service")
-	.action(() => {
-		pinwheelSvc.on("uninstall", () => {
-			console.log("wallslapper stopped")
-		})
-		pinwheelSvc.stop()
-		pinwheelSvc.uninstall()
-	})
+// program
+// 	.command("stop")
+// 	.description("Stop the wallslapper service")
+// 	.action(() => {
+// 		pinwheelSvc.on("uninstall", () => {
+// 			console.log("wallslapper stopped")
+// 		})
+// 		pinwheelSvc.stop()
+// 		pinwheelSvc.uninstall()
+// 	})
 
 program
 	.command("change <hexcode> [duration]")
