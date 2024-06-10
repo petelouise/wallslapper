@@ -52,6 +52,7 @@ program
 	.command("start pinwheel <palette> [duration]")
 	.description("Start the pinwheel in the background")
 	.action((palette, duration) => {
+		pinwheelSvc.script = `./pinwheelService.js ${palette} ${duration || ""}`
 		pinwheelSvc.on("install", () => {
 			pinwheelSvc.start()
 			console.log("Pinwheel started in the background")
