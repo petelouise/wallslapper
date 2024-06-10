@@ -63,7 +63,7 @@ export async function readCurrentColor() {
 	try {
 		if (fs.existsSync(currentColorPath)) {
 			const data = await fs.promises.readFile(currentColorPath, "utf8")
-			return data.trim().replaceAll("#", "")
+			return data.trim()
 		} else {
 			console.warn(`${currentColorPath} not found`)
 			return
@@ -76,7 +76,7 @@ export async function readCurrentColor() {
 
 export async function writeCurrentColor(color) {
 	try {
-		await fs.promises.writeFile(currentColorPath, color.replace("#", ""), "utf8")
+		await fs.promises.writeFile(currentColorPath, color, "utf8")
 	} catch (error) {
 		console.error("Error writing current color:", error)
 	}
