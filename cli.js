@@ -8,7 +8,16 @@ const program = new Command()
 
 const scriptPath = "./schedule.js"
 
-const svc = new Service({
+const pinwheelSvc = new Service({
+	name: "wallslapper-pinwheel",
+	description: "runs the pinwheel in the background",
+	script: "./pinwheelService.js",
+	runAtLoad: true,
+	// Uncomment the following line to run with node
+	// execPath: '/usr/local/bin/node'
+})
+
+const wallslapperSvc = new Service({
 	name: "wallslapper",
 	description: "changes wallpaper throughout the day",
 	script: scriptPath,
@@ -21,11 +30,22 @@ program
 	.command("start")
 	.description("Start the wallslapper service")
 	.action(() => {
-		svc.on("install", () => {
-			svc.start()
+		pinwheelSvc.on("install", () => {
+			pinwheelSvc.start()
 			console.log("wallslapper started")
 		})
 		svc.install()
+	})
+
+program
+	.command("stop pinwheel")
+	.description("Stop the pinwheel service")
+	.action(() => {
+		pinwheelSvc.on("uninstall", () => {
+			console.log("Pinwheel stopped")
+		})
+		pinwheelSvc.stop()
+		pinwheelSvc.uninstall()
 	})
 
 program
