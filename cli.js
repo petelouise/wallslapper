@@ -29,6 +29,17 @@ program
 	})
 
 program
+	.command("start pinwheel <palette> [duration]")
+	.description("Start the pinwheel in the background")
+	.action((palette, duration) => {
+		svc.on("install", () => {
+			svc.start()
+			console.log("Pinwheel started in the background")
+		})
+		svc.install()
+	})
+
+program
 	.command("stop")
 	.description("Stop the wallslapper service")
 	.action(() => {
