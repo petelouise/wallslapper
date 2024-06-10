@@ -12,14 +12,23 @@ const scriptPath = "./schedule.js"
 
 const homeDir = os.homedir()
 
+const userLaunchAgentsDir = path.join(homeDir, "Library/LaunchAgents")
+
 const pinwheelSvc = new Service({
 	name: "wallslapper-pinwheel",
 	description: "runs the pinwheel in the background",
 	script: "./pinwheelService.js",
 	runAtLoad: true,
 	logpath: path.join(homeDir, "Library/Logs/wallslapper-pinwheel"),
-	// Uncomment the following line to run with node
-	// execPath: '/usr/local/bin/node'
+	plist: {
+		KeepAlive: true,
+		RunAtLoad: true,
+		Label: "wallslapper-pinwheel",
+		ProgramArguments: [process.execPath, path.join(__dirname, "pinwheelService.js")],
+		StandardOutPath: path.join(homeDir, "Library/Logs/wallslapper-pinwheel/out.log"),
+		StandardErrorPath: path.join(homeDir, "Library/Logs/wallslapper-pinwheel/err.log"),
+	},
+	installPath: userLaunchAgentsDir,
 })
 
 const wallslapperSvc = new Service({
@@ -28,8 +37,15 @@ const wallslapperSvc = new Service({
 	script: scriptPath,
 	runAtLoad: true,
 	logpath: path.join(homeDir, "Library/Logs/wallslapper"),
-	// Uncomment the following line to run with node
-	// execPath: '/usr/local/bin/node'
+	plist: {
+		KeepAlive: true,
+		RunAtLoad: true,
+		Label: "wallslapper",
+		ProgramArguments: [process.execPath, path.join(__dirname, scriptPath)],
+		StandardOutPath: path.join(homeDir, "Library/Logs/wallslapper/out.log"),
+		StandardErrorPath: path.join(homeDir, "Library/Logs/wallslapper/err.log"),
+	},
+	installPath: userLaunchAgentsDir,
 })
 
 // program
