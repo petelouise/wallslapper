@@ -43,7 +43,7 @@ const startPinwheel = (palette, duration) => {
 	}
 
 	const nodePath = getNodePath()
-	const child = spawn(nodePath, [scriptPath, palette, duration], {
+	const child = spawn(nodePath, [scriptPath, palette, duration.toString()], {
 		detached: true,
 		stdio: "ignore",
 	})
