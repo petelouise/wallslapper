@@ -20,6 +20,7 @@ export async function runPinwheel(palette, duration, forever = false) {
 
 export async function transitionToColor(endColor, duration) {
 	const startColor = await readCurrentColor()
+	console.log(`Starting transition from ${startColor} to ${endColor}`)
 
 	if (!startColor) {
 		console.log("No start color found, ignoring transition")
@@ -34,7 +35,9 @@ export async function transitionToColor(endColor, duration) {
 	if (!duration) {
 		console.log(`Instant transition to ${endColor}`)
 		const imagePath = await createSolidColorImage(endColor)
+		console.log(`Step ${i}: Setting wallpaper to ${intermediateColor}`)
 		await setWallpaper(imagePath)
+		console.log(`Step ${i}: Wallpaper set to ${intermediateColor}`)
 		await writeCurrentColor(endColor)
 		console.log("Transition complete")
 		return
@@ -51,9 +54,13 @@ export async function transitionToColor(endColor, duration) {
 		const factor = i / steps
 		const intermediateColor = interpolateColor(startColor, endColor, factor)
 		console.log(`Step ${i}: Color ${intermediateColor}`)
+		console.log(`Step ${i}: Intermediate Color ${intermediateColor}`)
 		const imagePath = await createSolidColorImage(intermediateColor)
+		console.log(`Step ${i}: Image Path ${imagePath}`)
 		await setWallpaper(imagePath)
+		console.log(`Step ${i}: Waiting for ${interval} ms`)
 		await new Promise((resolve) => setTimeout(resolve, interval))
+		console.log(`Step ${i}: Wait complete`)
 	}
 
 	await writeCurrentColor(endColor)
