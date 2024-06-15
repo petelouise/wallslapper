@@ -1,10 +1,9 @@
 import chalk from "chalk"
-import { execSync } from "child_process"
+import { execSync, spawn } from "child_process"
 import { Command } from "commander"
 import fs from "fs"
 import parseDuration from "parse-duration"
 import path from "path"
-import plist from "plist"
 import { fileURLToPath } from "url"
 import { readConfig } from "./configUtils.js"
 import { runPinwheel } from "./wallpaperUtils.js"
@@ -15,12 +14,7 @@ const __dirname = path.dirname(__filename)
 
 const program = new Command()
 const scriptPath = path.resolve(__dirname, "./pinwheelService.js")
-const plistLabel = "com.ptitlouise.wallslapper"
-const plistName = `${plistLabel}.plist`
-const launchAgentsPath = path.resolve(
-	process.env.HOME,
-	`Library/LaunchAgents/${plistName}`
-)
+const pidFilePath = "/tmp/wallslapper.pid"
 
 const getNodePath = () => {
 	try {
@@ -31,60 +25,49 @@ const getNodePath = () => {
 	}
 }
 
-const createPlist = (nodePath) => {
-	const plistContent = plist.build({
-		Label: plistLabel,
-		ProgramArguments: [nodePath, scriptPath],
-		RunAtLoad: true,
-		KeepAlive: true,
-		StandardOutPath: "/tmp/wallslapper.out",
-		StandardErrorPath: "/tmp/wallslapper.err",
-	})
-
-	fs.writeFileSync(launchAgentsPath, plistContent)
-	execSync(`chown $USER:staff ${launchAgentsPath}`, {
-		stdio: "inherit",
-	})
-	execSync(`chmod 644 ${launchAgentsPath}`, {
-		stdio: "inherit",
-	})
-	console.log(`Plist file created at: ${launchAgentsPath}`)
+const isProcessRunning = (pid) => {
+	try {
+		return process.kill(pid, 0)
+	} catch (error) {
+		return error.code === "EPERM"
+	}
 }
 
 const startPinwheel = (palette, duration) => {
+	if (fs.existsSync(pidFilePath)) {
+		const pid = parseInt(fs.readFileSync(pidFilePath, "utf8"))
+		if (isProcessRunning(pid)) {
+			console.log(`Pinwheel is already running with PID ${pid}`)
+			return
+		}
+	}
+
 	const nodePath = getNodePath()
-	createPlist(nodePath)
-	try {
-		execSync(`sudo launchctl bootout gui/$(id -u) ${launchAgentsPath}`, {
-			stdio: "inherit",
-		})
-	} catch (error) {
-		console.log(
-			"Service not previously loaded or another issue occurred:",
-			error.message
-		)
-	}
-	try {
-		execSync(`sudo launchctl bootstrap gui/$(id -u) ${launchAgentsPath}`, {
-			stdio: "inherit",
-		})
-		console.log(`Pinwheel started with palette ${palette} for duration ${duration}`)
-	} catch (error) {
-		console.log("Failed to start the service:", error.message)
-	}
+	const child = spawn(nodePath, [scriptPath, palette, duration], {
+		detached: true,
+		stdio: "ignore",
+	})
+	child.unref()
+
+	fs.writeFileSync(pidFilePath, child.pid.toString(), "utf8")
+	console.log(`Pinwheel started with palette ${palette} for duration ${duration}`)
 }
 
 const stopPinwheel = () => {
-	try {
-		execSync(`sudo launchctl bootout gui/$(id -u) ${launchAgentsPath}`, {
-			stdio: "inherit",
-		})
-		console.log("Pinwheel stopped")
-	} catch (error) {
-		console.log(
-			"Failed to stop the pinwheel service or service not loaded:",
-			error.message
-		)
+	if (fs.existsSync(pidFilePath)) {
+		const pid = parseInt(fs.readFileSync(pidFilePath, "utf8"))
+		try {
+			process.kill(pid)
+			fs.unlinkSync(pidFilePath)
+			console.log("Pinwheel stopped")
+		} catch (error) {
+			console.log(
+				"Failed to stop the pinwheel service or service not loaded:",
+				error.message
+			)
+		}
+	} else {
+		console.log("Pinwheel is not running")
 	}
 }
 
@@ -138,14 +121,6 @@ program
 		const durationMs = parseDuration(duration)
 		await transitionToColor(hexcode, durationMs)
 	})
-
-// program
-// 	.command("pinwheel <palette> [duration]")
-// 	.description("cycle wallpaper through the default palette")
-// 	.option("--forever", "Run the pinwheel forever in a loop")
-// 	.action(async (palette, duration, cmdObj) => {
-// 		runPinwheel(palette, duration, cmdObj.forever)
-// 	})
 
 program
 	.command("genconfig")
