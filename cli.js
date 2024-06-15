@@ -6,6 +6,7 @@ import path from "path"
 import plist from "plist"
 import { fileURLToPath } from "url"
 import { runPinwheel } from "./wallpaperUtils.js"
+import { readConfig } from "./configUtils.js"
 
 // Resolve __filename and __dirname in ES module
 const __filename = fileURLToPath(import.meta.url)
@@ -149,6 +150,20 @@ program
 	.description("Generate configuration file")
 	.action(async () => {
 		await genconfig()
+	})
+
+program
+	.command("list-palettes")
+	.description("List available palettes from the config")
+	.action(async () => {
+		const config = await readConfig()
+		console.log("Available Palettes:")
+		config.palettes.forEach((palette, index) => {
+			console.log(`${index + 1}. ${palette.name}`)
+			palette.colors.forEach((color, colorIndex) => {
+				console.log(`   ${colorIndex + 1}. #${color}`)
+			})
+		})
 	})
 
 program.parse(process.argv)
