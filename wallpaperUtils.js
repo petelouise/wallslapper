@@ -40,7 +40,6 @@ export async function transitionToColor(endColor, duration) {
 		return
 	}
 
-	console.log(`Starting transition from ${startColor} to ${endColor}`)
 	const minInterval = 100 // Minimum interval between steps in milliseconds
 	const steps = Math.max(1, Math.floor(duration / minInterval))
 	const interval = duration / steps
