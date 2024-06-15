@@ -87,11 +87,11 @@ const stopPinwheel = () => {
 	}
 }
 
-const pinwheelCommand = program.command("pinwheel").description("Pinwheel commands")
+const pinwheelCommand = program.command("pinwheel").description("pinwheel commands")
 
 pinwheelCommand
 	.command("run <palette> [duration]")
-	.description("Run the pinwheel in the foreground")
+	.description("run the pinwheel in the foreground")
 	.action((palette, duration) => {
 		const durationMs = parseDuration(duration)
 		runPinwheel(palette, durationMs)
@@ -99,7 +99,7 @@ pinwheelCommand
 
 pinwheelCommand
 	.command("start <palette> [duration]")
-	.description("Start the pinwheel in the background")
+	.description("start the pinwheel in the background")
 	.action((palette, duration) => {
 		const durationMs = parseDuration(duration)
 		startPinwheel(palette, durationMs)
@@ -107,14 +107,14 @@ pinwheelCommand
 
 pinwheelCommand
 	.command("stop")
-	.description("Stop the pinwheel service")
+	.description("stop the pinwheel service")
 	.action(() => {
 		stopPinwheel()
 	})
 
 program
 	.command("change <hexcode> [duration]")
-	.description("Change wallpaper to a specific color")
+	.description("change wallpaper to a specific color")
 	.action(async (hexcode, duration) => {
 		const durationMs = parseDuration(duration)
 		await transitionToColor(hexcode, durationMs)
@@ -122,7 +122,7 @@ program
 
 program
 	.command("random [duration]")
-	.description("Change wallpaper to a random color")
+	.description("change wallpaper to a random color")
 	.action(async (duration) => {
 		const hexcode = getRandomColor()
 		const durationMs = parseDuration(duration)
@@ -148,14 +148,14 @@ program
 
 program
 	.command("genconfig")
-	.description("Generate configuration file")
+	.description("generate configuration file")
 	.action(async () => {
 		await genconfig()
 	})
 
 program
 	.command("list-palettes")
-	.description("List available palettes from the config")
+	.description("list available palettes from the config")
 	.action(async () => {
 		const config = await readConfig()
 		console.log("available palettes:")
