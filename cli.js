@@ -161,7 +161,7 @@ program
 		config.palettes.forEach((palette, index) => {
 			console.log(`${index + 1}. ${palette.name}`)
 			palette.colors.forEach((color, colorIndex) => {
-				console.log(`   ${colorIndex + 1}. #${color}`)
+				console.log(`   ${colorIndex + 1}. ${color}`)
 			})
 		})
 	})
