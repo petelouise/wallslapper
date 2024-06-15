@@ -1,3 +1,4 @@
+import chalk from "chalk"
 import { execSync } from "child_process"
 import { Command } from "commander"
 import fs from "fs"
@@ -5,9 +6,8 @@ import parseDuration from "parse-duration"
 import path from "path"
 import plist from "plist"
 import { fileURLToPath } from "url"
-import { runPinwheel } from "./wallpaperUtils.js"
 import { readConfig } from "./configUtils.js"
-import chalk from "chalk"
+import { runPinwheel } from "./wallpaperUtils.js"
 
 // Resolve __filename and __dirname in ES module
 const __filename = fileURLToPath(import.meta.url)
@@ -158,12 +158,12 @@ program
 	.description("List available palettes from the config")
 	.action(async () => {
 		const config = await readConfig()
-		console.log("Available Palettes:")
-		config.palettes.forEach((palette, index) => {
-			console.log(`${index + 1}. ${palette.name}`)
-			palette.colors.forEach((color, colorIndex) => {
+		console.log("available palettes:")
+		config.palettes.forEach((palette) => {
+			console.log(palette.name)
+			palette.colors.forEach((color) => {
 				const colorSwatch = chalk.bgHex(`#${color}`)("   ")
-				console.log(`   ${colorIndex + 1}. ${color} ${colorSwatch}`)
+				console.log(`   ${color} ${colorSwatch}`)
 			})
 		})
 	})
