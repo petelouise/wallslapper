@@ -36,7 +36,9 @@ export async function transitionToColor(endColor, duration) {
 		console.log(`Instant transition to ${endColor}`)
 		const imagePath = await createSolidColorImage(endColor)
 		console.log(`Step ${i}: Setting wallpaper to ${intermediateColor}`)
+		console.log(`Step ${i}: Setting wallpaper to ${intermediateColor} with image path ${imagePath}`)
 		await setWallpaper(imagePath)
+		console.log(`Step ${i}: Wallpaper set to ${intermediateColor} with image path ${imagePath}`)
 		console.log(`Step ${i}: Wallpaper set to ${intermediateColor}`)
 		await writeCurrentColor(endColor)
 		console.log("Transition complete")
@@ -98,5 +100,6 @@ export async function createSolidColorImage(color) {
 	const image = new Jimp(256, 256, color)
 	const imagePath = path.join(os.tmpdir(), `solid_color_${Date.now()}.png`)
 	await image.writeAsync(imagePath)
+	console.log(`Created solid color image at ${imagePath} with color ${color}`)
 	return imagePath
 }
