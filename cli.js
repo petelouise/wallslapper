@@ -29,7 +29,7 @@ const getNodePath = () => {
 
 const createPlist = (nodePath) => {
 	const plistContent = plist.build({
-		Label: "com.yourdomain.wallslapper",
+		Label: "com.ptitlouise.wallslapper",
 		ProgramArguments: [nodePath, scriptPath],
 		RunAtLoad: true,
 		KeepAlive: true,
