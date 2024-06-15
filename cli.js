@@ -5,6 +5,7 @@ import parseDuration from "parse-duration"
 import path from "path"
 import plist from "plist"
 import { fileURLToPath } from "url"
+import { runPinwheel } from "./wallpaperUtils.js"
 
 // Resolve __filename and __dirname in ES module
 const __filename = fileURLToPath(import.meta.url)
@@ -85,6 +86,14 @@ const stopPinwheel = () => {
 }
 
 const pinwheelCommand = program.command("pinwheel").description("Pinwheel commands")
+
+pinwheelCommand
+	.command("run <palette> [duration]")
+	.description("Run the pinwheel in the foreground")
+	.action((palette, duration) => {
+		const durationMs = parseDuration(duration)
+		runPinwheel(palette, durationMs)
+	})
 
 pinwheelCommand
 	.command("start <palette> [duration]")
