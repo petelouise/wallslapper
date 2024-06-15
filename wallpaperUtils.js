@@ -1,4 +1,5 @@
 import fs from "fs"
+import ms from "ms"
 import os from "os"
 import path from "path"
 import { setWallpaper } from "wallpaper"
@@ -43,8 +44,9 @@ export async function transitionToColor(endColor, duration) {
 	const minInterval = 100 // Minimum interval between steps in milliseconds
 	const steps = Math.max(1, Math.floor(duration / minInterval))
 	const interval = duration / steps
+	const displayDuration = ms(duration)
 	console.log(
-		`Starting transition from ${startColor} to ${endColor} over ${duration}ms with ${steps} steps`
+		`Starting transition from ${startColor} to ${endColor} over ${displayDuration} with ${steps} steps`
 	)
 	for (let i = 0; i < steps; i++) {
 		const factor = i / steps
