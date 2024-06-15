@@ -15,7 +15,8 @@ const __dirname = path.dirname(__filename)
 
 const program = new Command()
 const scriptPath = path.resolve(__dirname, "./pinwheelService.js")
-const plistName = "com.yourdomain.wallslapper.plist"
+const plistLabel = "com.ptitlouise.wallslapper"
+const plistName = `${plistLabel}.plist`
 const launchAgentsPath = path.resolve(
 	process.env.HOME,
 	`Library/LaunchAgents/${plistName}`
@@ -32,7 +33,7 @@ const getNodePath = () => {
 
 const createPlist = (nodePath) => {
 	const plistContent = plist.build({
-		Label: "com.ptitlouise.wallslapper",
+		Label: plistLabel,
 		ProgramArguments: [nodePath, scriptPath],
 		RunAtLoad: true,
 		KeepAlive: true,
