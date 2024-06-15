@@ -5,6 +5,7 @@
 		"commander": "^12.1.0",
 		"jimp": "^0.22.12",
 		"node-mac": "^1.0.1",
+		"parse-duration": "^1.1.0",
 		"wallpaper": "^7.2.1",
 		"yargs": "^17.7.2"
 	},

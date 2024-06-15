@@ -1,6 +1,7 @@
 import { execSync } from "child_process"
 import { Command } from "commander"
 import fs from "fs"
+import parseDuration from "parse-duration"
 import path from "path"
 import plist from "plist"
 import { fileURLToPath } from "url"
@@ -89,7 +90,8 @@ pinwheelCommand
 	.command("start <palette> [duration]")
 	.description("Start the pinwheel in the background")
 	.action((palette, duration) => {
-		startPinwheel(palette, duration || "")
+		const durationMs = parseDuration(duration)
+		startPinwheel(palette, durationMs)
 	})
 
 pinwheelCommand
@@ -103,7 +105,8 @@ program
 	.command("change <hexcode> [duration]")
 	.description("Change wallpaper to a specific color")
 	.action(async (hexcode, duration) => {
-		await transitionToColor(hexcode, duration)
+		const durationMs = parseDuration(duration)
+		await transitionToColor(hexcode, durationMs)
 	})
 
 program
@@ -111,7 +114,8 @@ program
 	.description("Change wallpaper to a random color")
 	.action(async (duration) => {
 		const hexcode = getRandomColor()
-		await transitionToColor(hexcode, duration)
+		const durationMs = parseDuration(duration)
+		await transitionToColor(hexcode, durationMs)
 	})
 
 program
@@ -119,7 +123,8 @@ program
 	.description("change wallpaper to a random color from the default palette")
 	.action(async (palette, duration) => {
 		const hexcode = await getRandomColorFromPalette(palette)
-		await transitionToColor(hexcode, duration)
+		const durationMs = parseDuration(duration)
+		await transitionToColor(hexcode, durationMs)
 	})
 
 // program
