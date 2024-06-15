@@ -7,6 +7,7 @@ import plist from "plist"
 import { fileURLToPath } from "url"
 import { runPinwheel } from "./wallpaperUtils.js"
 import { readConfig } from "./configUtils.js"
+import chalk from "chalk"
 
 // Resolve __filename and __dirname in ES module
 const __filename = fileURLToPath(import.meta.url)
@@ -161,7 +162,8 @@ program
 		config.palettes.forEach((palette, index) => {
 			console.log(`${index + 1}. ${palette.name}`)
 			palette.colors.forEach((color, colorIndex) => {
-				console.log(`   ${colorIndex + 1}. ${color}`)
+				const colorSwatch = chalk.bgHex(`#${color}`)("   ")
+				console.log(`   ${colorIndex + 1}. ${color} ${colorSwatch}`)
 			})
 		})
 	})
