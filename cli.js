@@ -53,29 +53,29 @@ program
 	})
 
 program
-	.command("change <hexcode> [duration]")
+	.command("change <color> [duration]")
 	.description("change wallpaper to a specific color")
-	.action(async (hexcode, duration) => {
+	.action(async (color, duration) => {
 		const durationMs = parseDuration(duration)
-		await transitionToColor(hexcode, durationMs)
+		await transitionToColor(color, durationMs)
 	})
 
 program
 	.command("random [duration]")
 	.description("change wallpaper to a random color")
 	.action(async (duration) => {
-		const hexcode = getRandomColor()
+		const color = getRandomColor()
 		const durationMs = parseDuration(duration)
-		await transitionToColor(hexcode, durationMs)
+		await transitionToColor(color, durationMs)
 	})
 
 program
 	.command("shuffle <palette> [duration]")
 	.description("change wallpaper to a random color from the default palette")
 	.action(async (palette, duration) => {
-		const hexcode = await getRandomColorFromPalette(palette)
+		const color = await getRandomColorFromPalette(palette)
 		const durationMs = parseDuration(duration)
-		await transitionToColor(hexcode, durationMs)
+		await transitionToColor(color, durationMs)
 	})
 
 program
