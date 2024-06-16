@@ -27,11 +27,14 @@ pinwheelCommand
 const flipCommand = program.command("flip").description("flip commands")
 
 flipCommand
-	.command("run <palette> [interval] [forever]")
+	.command("run")
 	.description("flip thru the colors in the specified palette")
-	.action((palette, interval, forever) => {
-		const intervalMs = parseDuration(interval) || 10_000
-		flipThruPalette(palette, intervalMs, forever)
+	.option("--palette <palette>", "palette to use", "default")
+	.option("--interval <interval>", "interval between flips", "10s")
+	.option("--forever", "run forever", false)
+	.action((options) => {
+		const intervalMs = parseDuration(options.interval) || 10_000
+		flipThruPalette(options.palette, intervalMs, options.forever)
 	})
 
 flipCommand
