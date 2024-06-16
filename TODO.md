@@ -1,1 +1,2 @@
--  support for multiple color palettes
+-  [x] support for multiple color palettes
+-  [ ] use Supervisord for cross-platform process management
