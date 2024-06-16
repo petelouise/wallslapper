@@ -6,7 +6,7 @@ import parseDuration from "parse-duration"
 import path from "path"
 import { fileURLToPath } from "url"
 import { readConfig } from "./configUtils.js"
-import { runPinwheel } from "./wallpaperUtils.js"
+import { runPinwheel, transitionToColor } from "./wallpaperUtils.js"
 
 // Resolve __filename and __dirname in ES module
 const __filename = fileURLToPath(import.meta.url)

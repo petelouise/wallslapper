@@ -1,10 +1,13 @@
 import fs from "fs"
+import Jimp from "jimp"
 import ms from "ms"
 import os from "os"
 import path from "path"
 import { setWallpaper } from "wallpaper"
 import { interpolateColor } from "./colorUtils.js"
 import { readConfig } from "./configUtils.js"
+
+const minInterval = 100 // Minimum interval between steps in milliseconds
 
 export async function runPinwheel(palette, duration, forever = false) {
 	const config = await readConfig()
@@ -41,7 +44,6 @@ export async function transitionToColor(endColor, duration) {
 	}
 
 	console.log(`Starting transition from ${startColor} to ${endColor}`)
-	const minInterval = 100 // Minimum interval between steps in milliseconds
 	const steps = Math.max(1, Math.floor(duration / minInterval))
 	const interval = duration / steps
 	const displayDuration = ms(duration)
@@ -85,8 +87,6 @@ export async function writeCurrentColor(color) {
 		console.error("Error writing current color:", error)
 	}
 }
-
-import Jimp from "jimp"
 
 export async function createSolidColorImage(color) {
 	const image = new Jimp(256, 256, color)
