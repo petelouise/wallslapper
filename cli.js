@@ -29,9 +29,9 @@ const flipCommand = program.command("flip").description("flip commands")
 flipCommand
 	.command("run")
 	.description("flip thru the colors in the specified palette")
-	.option("--palette <palette>", "palette to use", "default")
-	.option("--interval <interval>", "interval between flips", "10s")
-	.option("--forever", "run forever", false)
+	.option("-p, --palette <palette>", "palette to use", "default")
+	.option("-i, --interval <interval>", "interval between flips", "10s")
+	.option("-f, --forever", "run forever", false)
 	.action((options) => {
 		const intervalMs = parseDuration(options.interval) || 10_000
 		flipThruPalette(options.palette, intervalMs, options.forever)
