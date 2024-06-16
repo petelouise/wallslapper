@@ -63,6 +63,27 @@ export async function transitionToColor(endColor, duration) {
 	console.log("Transition complete")
 }
 
+export async function flipThruPalette(palette, interval, forever = false) {
+	const config = await readConfig()
+	const colors = config.palettes.find((p) => p.name === palette).colors
+
+	do {
+		for (var i = 0; i < colors.length; i++) {
+			const color = colors[i]
+			await flipToColor(color)
+			await new Promise((resolve) => setTimeout(resolve, interval))
+		}
+	} while (forever)
+}
+
+export async function flipToColor(endColor) {
+	console.log(`flipping to ${endColor}`)
+	const imagePath = await createSolidColorImage(endColor)
+	await setWallpaper(imagePath)
+	await writeCurrentColor(endColor)
+	console.log("Transition complete")
+}
+
 const currentColorPath = path.join(os.homedir(), ".wallslappercurrent")
 
 export async function readCurrentColor() {
