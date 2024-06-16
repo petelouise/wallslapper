@@ -38,11 +38,14 @@ flipCommand
 	})
 
 flipCommand
-	.command("start <palette> [interval]")
+	.command("start")
 	.description("flip thru the colors in the specified palette in background")
-	.action((palette, interval) => {
-		const intervalMs = parseDuration(interval) || 10_000
-		startFlipPalette(palette, intervalMs)
+	.option("-p, --palette <palette>", "palette to use", "default")
+	.option("-i, --interval <interval>", "interval between flips", "10s")
+	.option("-f, --forever", "run forever", false)
+	.action((options) => {
+		const intervalMs = parseDuration(options.interval) || 10_000
+		startFlipPalette(options.palette, intervalMs, options.forever)
 	})
 
 program
