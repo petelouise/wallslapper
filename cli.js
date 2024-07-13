@@ -21,7 +21,8 @@ pinwheelCommand
 	.command("start <palette> [duration]")
 	.description("start the pinwheel in the background")
 	.action((palette, duration) => {
-		startPinwheel(palette, duration)
+		const durationMs = parseDuration(duration) || 0
+		startPinwheel(palette, durationMs)
 	})
 
 const flipCommand = program.command("flip").description("flip commands")

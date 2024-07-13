@@ -29,7 +29,7 @@ export function isProcessRunning(pid) {
 	}
 }
 
-export function startPinwheel(palette, duration) {
+export function startPinwheel(palette, durationMs) {
 	if (fs.existsSync(pidFilePath)) {
 		const pid = parseInt(fs.readFileSync(pidFilePath, "utf8"))
 		if (isProcessRunning(pid)) {
@@ -38,7 +38,6 @@ export function startPinwheel(palette, duration) {
 		}
 	}
 
-	const durationMs = parseDuration(duration) || 0
 	const nodePath = getNodePath()
 	const child = spawn(nodePath, [pinwheelScriptPath, palette, durationMs.toString()], {
 		detached: true,
